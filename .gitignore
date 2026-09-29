@@ -1,0 +1,19 @@
+# Build output
+build/
+*.zip
+
+# Terraform: state is local and never committed
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+terraform.tfvars
+crash.log
+
+# Local env / secrets
+.env
+
+# OS / editor
+.DS_Store
+coverage.out
