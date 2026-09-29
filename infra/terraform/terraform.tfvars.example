@@ -1,0 +1,4 @@
+# Copy to terraform.tfvars (gitignored) and fill in.
+budget_email = "you@example.com"
+# create_budget = false
+# region      = "us-east-1"
