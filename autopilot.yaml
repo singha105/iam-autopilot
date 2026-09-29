@@ -1,0 +1,34 @@
+# Configuration read by the autopilot (Day 2 onwards).
+
+# Roles the autopilot may tighten. Each must be tagged autopilot:managed=true and
+# carry exactly one customer-managed policy under /iamap/managed/.
+roles:
+  - name: iamap-demo-inventory-role
+    observationDays: 1 # short for the demo; 90 in real life
+    keepActions: []
+  - name: iamap-demo-config-reader-role
+    observationDays: 1
+    keepActions: []
+  - name: iamap-demo-quarterly-role
+    observationDays: 1
+    keepActions: []
+
+# Actions never removed from any role, whatever the usage data says.
+neverRemove: []
+
+# Data-plane actions that CloudTrail event history never records. When Access
+# Advisor shows the service was used, these are kept (scoped to resources that
+# were seen) and flagged in the PR.
+dataPlaneActions:
+  dynamodb: [GetItem, PutItem, UpdateItem, DeleteItem, Query, Scan, BatchGetItem, BatchWriteItem]
+  s3: [GetObject, PutObject, DeleteObject]
+  sqs: [SendMessage, ReceiveMessage, DeleteMessage]
+  sns: [Publish]
+  lambda: [InvokeFunction]
+  kms: [Decrypt, Encrypt, GenerateDataKey]
+
+# Post-apply watch window. lagBufferMinutes covers CloudTrail event history delay.
+watch:
+  minutes: 30
+  lagBufferMinutes: 15
+  pollSeconds: 300
