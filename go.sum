@@ -16,6 +16,8 @@ github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.4 h1:dD4MR81I7YkpEBRk6UP
 github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.4/go.mod h1:EcXV1kAFd5XwSkDHlj94gnF3q5CkJyYiIJfH8N0VmrE=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.4 h1:7Wo47d/xn/7KttCSBd8EGYeZ7ULRFRkUHr6vkZPBzVQ=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.4/go.mod h1:tDB2IVC1xC3vX8o+6uRlzhTxP3g1b77CZXFX/oD2FnQ=
+github.com/aws/aws-sdk-go-v2/service/cloudtrail v1.65.1 h1:7l3q63iLAxFRN2NxczNTfwKsqMJIyHfAOo69Sl6zmy8=
+github.com/aws/aws-sdk-go-v2/service/cloudtrail v1.65.1/go.mod h1:2kH5YUhglK8vConk6i8G3Kdo8C+7MKSxpaL7flMYF5w=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.69.1 h1:bKwiQA6SKqFXBO+1IwP/hTwCU5RlqeitG4gVvSuMN8U=
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.69.1/go.mod h1:Gm+i2GlUsFNlzoBq8VXF44XHbKANn3tV8nYBBp3rN8Q=
 github.com/aws/aws-sdk-go-v2/service/ec2 v1.337.0 h1:qvRAMBHqlGIc0mqv4jhgpfUSpBAIInwf3EXgBGZ/Nyk=
