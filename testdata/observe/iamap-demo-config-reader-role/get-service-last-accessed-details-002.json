@@ -1,0 +1,1289 @@
+{
+  "JobCompletionDate": "2026-10-01T00:36:28.151Z",
+  "JobCreationDate": "2026-10-01T00:36:26.675Z",
+  "JobStatus": "COMPLETED",
+  "ServicesLastAccessed": [
+    {
+      "ServiceName": "Amazon DynamoDB",
+      "ServiceNamespace": "dynamodb",
+      "LastAuthenticated": "2026-09-29T18:18:08Z",
+      "LastAuthenticatedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+      "LastAuthenticatedRegion": "us-east-1",
+      "TotalAuthenticatedEntities": 1,
+      "TrackedActionsLastAccessed": [
+        {
+          "ActionName": "CreateBackup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateGlobalTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteBackup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeBackup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeContinuousBackups",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeContributorInsights",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeEndpoints",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeExport",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeGlobalTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeGlobalTableSettings",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeImport",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeKinesisStreamingDestination",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeLimits",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeStream",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeTable",
+          "LastAccessedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+          "LastAccessedRegion": "us-east-1",
+          "LastAccessedTime": "2026-09-29T18:18:08Z"
+        },
+        {
+          "ActionName": "DescribeTableReplicaAutoScaling",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeTimeToLive",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DisableKinesisStreamingDestination",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "EnableKinesisStreamingDestination",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ExportTableToPointInTime",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetResourcePolicy",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ImportTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListBackups",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListContributorInsights",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListExports",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListGlobalTables",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListImports",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListStreams",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListTables",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RestoreTableFromBackup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RestoreTableToPointInTime",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateContinuousBackups",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateContributorInsights",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateGlobalTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateGlobalTableSettings",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateKinesisStreamingDestination",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateTable",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateTableReplicaAutoScaling",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateTimeToLive",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        }
+      ]
+    },
+    {
+      "ServiceName": "AWS Key Management Service",
+      "ServiceNamespace": "kms",
+      "LastAuthenticated": "2026-09-29T18:12:36Z",
+      "LastAuthenticatedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+      "LastAuthenticatedRegion": "us-east-1",
+      "TotalAuthenticatedEntities": 1,
+      "TrackedActionsLastAccessed": [
+        {
+          "ActionName": "Decrypt",
+          "LastAccessedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+          "LastAccessedRegion": "us-east-1",
+          "LastAccessedTime": "2026-09-29T18:12:36Z"
+        }
+      ]
+    },
+    {
+      "ServiceName": "Amazon CloudWatch Logs",
+      "ServiceNamespace": "logs",
+      "LastAuthenticated": "2026-09-29T18:18:15Z",
+      "LastAuthenticatedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+      "LastAuthenticatedRegion": "us-east-1",
+      "TotalAuthenticatedEntities": 1,
+      "TrackedActionsLastAccessed": [
+        {
+          "ActionName": "CreateLogGroup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateLogStream",
+          "LastAccessedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+          "LastAccessedRegion": "us-east-1",
+          "LastAccessedTime": "2026-09-29T18:12:39Z"
+        }
+      ]
+    },
+    {
+      "ServiceName": "Amazon SNS",
+      "ServiceNamespace": "sns",
+      "LastAuthenticated": null,
+      "LastAuthenticatedEntity": null,
+      "LastAuthenticatedRegion": null,
+      "TotalAuthenticatedEntities": 0,
+      "TrackedActionsLastAccessed": null
+    },
+    {
+      "ServiceName": "Amazon SQS",
+      "ServiceNamespace": "sqs",
+      "LastAuthenticated": null,
+      "LastAuthenticatedEntity": null,
+      "LastAuthenticatedRegion": null,
+      "TotalAuthenticatedEntities": 0,
+      "TrackedActionsLastAccessed": [
+        {
+          "ActionName": "AddPermission",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CancelMessageMoveTask",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateQueue",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteQueue",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "PurgeQueue",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RemovePermission",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "SetQueueAttributes",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        }
+      ]
+    },
+    {
+      "ServiceName": "AWS Systems Manager",
+      "ServiceNamespace": "ssm",
+      "LastAuthenticated": "2026-09-29T18:18:08Z",
+      "LastAuthenticatedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+      "LastAuthenticatedRegion": "us-east-1",
+      "TotalAuthenticatedEntities": 1,
+      "TrackedActionsLastAccessed": [
+        {
+          "ActionName": "AssociateOpsItemRelatedItem",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CancelCommand",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CancelMaintenanceWindowExecution",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateActivation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateAssociation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateAssociationBatch",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateDocument",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateOpsItem",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateOpsMetadata",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreatePatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "CreateResourceDataSync",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteActivation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteAssociation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteCloudConnector",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteDocument",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteInventory",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteOpsItem",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteOpsMetadata",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteParameter",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteParameters",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeletePatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteResourceDataSync",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeleteResourcePolicy",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeregisterManagedInstance",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeregisterPatchBaselineForPatchGroup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeregisterTargetFromMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DeregisterTaskFromMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeActivations",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeAssociation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeAssociationExecutionTargets",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeAssociationExecutions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeAutomationExecutions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeAutomationStepExecutions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeAvailablePatches",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeDocument",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeDocumentParameters",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeDocumentPermission",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeEffectiveInstanceAssociations",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeEffectivePatchesForPatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInstanceAssociationsStatus",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInstanceInformation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInstancePatchStates",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInstancePatchStatesForPatchGroup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInstancePatches",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInstanceProperties",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeInventoryDeletions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowExecutionTaskInvocations",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowExecutionTasks",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowExecutions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowSchedule",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowTargets",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowTasks",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindows",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeMaintenanceWindowsForTarget",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeOpsItems",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeParameters",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribePatchBaselines",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribePatchGroupState",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribePatchGroups",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribePatchProperties",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DescribeSessions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "DisassociateOpsItemRelatedItem",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetAccessToken",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetAutomationExecution",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetCalendarState",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetCloudConnector",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetCommandInvocation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetConnectionStatus",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetDefaultPatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetDeployablePatchSnapshotForInstance",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetDocument",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetExecutionPreview",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetInventory",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetInventorySchema",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetMaintenanceWindowExecution",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetMaintenanceWindowExecutionTask",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetMaintenanceWindowExecutionTaskInvocation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetMaintenanceWindowTask",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetOpsItem",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetOpsMetadata",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetOpsSummary",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetParameter",
+          "LastAccessedEntity": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+          "LastAccessedRegion": "us-east-1",
+          "LastAccessedTime": "2026-09-29T18:18:08Z"
+        },
+        {
+          "ActionName": "GetParameterHistory",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetParameters",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetParametersByPath",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetPatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetPatchBaselineForPatchGroup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetResourcePolicies",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "GetServiceSetting",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "LabelParameterVersion",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListAssociationVersions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListAssociations",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListCloudConnectors",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListCommandInvocations",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListCommands",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListComplianceItems",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListComplianceSummaries",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListDocumentMetadataHistory",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListDocumentVersions",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListDocuments",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListInstanceAssociations",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListInventoryEntries",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListNodes",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListNodesSummary",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListOpsItemEvents",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListOpsItemRelatedItems",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListOpsMetadata",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListResourceComplianceSummaries",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ListResourceDataSync",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ModifyDocumentPermission",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "PutComplianceItems",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "PutInventory",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "PutParameter",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "PutResourcePolicy",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RegisterDefaultPatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RegisterManagedInstance",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RegisterPatchBaselineForPatchGroup",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RegisterTargetWithMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RegisterTaskWithMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "RequestManagedInstanceRoleToken",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ResetServiceSetting",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ResumeSession",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "SendAutomationSignal",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "SendCommand",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "StartAssociationsOnce",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "StartAutomationExecution",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "StartChangeRequestExecution",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "StartSession",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "StopAutomationExecution",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "TerminateSession",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UnlabelParameterVersion",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateAssociation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateAssociationStatus",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateCloudConnector",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateDocument",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateDocumentDefaultVersion",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateDocumentMetadata",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateInstanceInformation",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateMaintenanceWindow",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateMaintenanceWindowTarget",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateMaintenanceWindowTask",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateManagedInstancePublicKey",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateManagedInstanceRole",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateOpsItem",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateOpsMetadata",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdatePatchBaseline",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateResourceDataSync",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "UpdateServiceSetting",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        },
+        {
+          "ActionName": "ValidateCloudConnector",
+          "LastAccessedEntity": null,
+          "LastAccessedRegion": null,
+          "LastAccessedTime": null
+        }
+      ]
+    }
+  ],
+  "Error": null,
+  "IsTruncated": false,
+  "JobType": "ACTION_LEVEL",
+  "Marker": null,
+  "ResultMetadata": {}
+}

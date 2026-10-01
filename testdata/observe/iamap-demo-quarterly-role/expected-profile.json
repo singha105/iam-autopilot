@@ -1,0 +1,60 @@
+{
+  "roleArn": "arn:aws:iam::123456789012:role/iamap-demo-quarterly-role",
+  "roleName": "iamap-demo-quarterly-role",
+  "functionName": "iamap-demo-quarterly",
+  "window": {
+    "start": "2026-07-03T00:36:29Z",
+    "end": "2026-10-01T00:36:29Z"
+  },
+  "observedCalls": [
+    {
+      "action": "ssm:GetParameter",
+      "resource": "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly/schedule",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:41Z",
+      "lastSeen": "2026-09-29T18:18:11Z",
+      "readOnly": true
+    }
+  ],
+  "servicesAccessed": [
+    {
+      "namespace": "ec2",
+      "lastAuthenticated": null,
+      "trackedActions": []
+    },
+    {
+      "namespace": "logs",
+      "lastAuthenticated": "2026-09-29T18:18:18Z",
+      "trackedActions": [
+        {
+          "action": "logs:CreateLogStream",
+          "lastAccessed": "2026-09-29T18:12:43Z"
+        }
+      ]
+    },
+    {
+      "namespace": "sns",
+      "lastAuthenticated": null,
+      "trackedActions": []
+    },
+    {
+      "namespace": "ssm",
+      "lastAuthenticated": "2026-09-29T18:18:11Z",
+      "trackedActions": [
+        {
+          "action": "ssm:GetParameter",
+          "lastAccessed": "2026-09-29T18:18:11Z"
+        }
+      ]
+    }
+  ],
+  "deniedCalls": [],
+  "warnings": [
+    "excluded 1 platform call(s): kms:Decrypt by the Lambda runtime (environment variable decryption) (made by AWS with the role's credentials, not by the function's code)",
+    "excluded 1 platform call(s): logs:CreateLogStream by the Lambda runtime (awslambda-worker) (made by AWS with the role's credentials, not by the function's code)"
+  ],
+  "stats": {
+    "eventsScanned": 22,
+    "pagesFetched": 1
+  }
+}

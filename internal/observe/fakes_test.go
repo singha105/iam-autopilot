@@ -43,6 +43,7 @@ type ev struct {
 	issuer, source, name string
 	at                   time.Time
 	errorCode, invokedBy string
+	userAgent            string
 	params               map[string]any
 	readOnly             *bool
 }
@@ -77,6 +78,9 @@ func (e ev) event(t *testing.T) cttypes.Event {
 	}
 	if e.errorCode != "" {
 		doc["errorCode"] = e.errorCode
+	}
+	if e.userAgent != "" {
+		doc["userAgent"] = e.userAgent
 	}
 	ro := true
 	if e.readOnly != nil {

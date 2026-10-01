@@ -1,0 +1,11 @@
+{
+  "JobCompletionDate": null,
+  "JobCreationDate": "2026-10-01T00:36:29.782Z",
+  "JobStatus": "IN_PROGRESS",
+  "ServicesLastAccessed": null,
+  "Error": null,
+  "IsTruncated": false,
+  "JobType": "",
+  "Marker": null,
+  "ResultMetadata": {}
+}

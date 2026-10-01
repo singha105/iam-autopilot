@@ -1,0 +1,23 @@
+{
+  "Tags": [
+    {
+      "Key": "Project",
+      "Value": "iam-autopilot"
+    },
+    {
+      "Key": "ManagedBy",
+      "Value": "terraform"
+    },
+    {
+      "Key": "autopilot:function",
+      "Value": "iamap-demo-inventory"
+    },
+    {
+      "Key": "autopilot:managed",
+      "Value": "true"
+    }
+  ],
+  "IsTruncated": false,
+  "Marker": null,
+  "ResultMetadata": {}
+}

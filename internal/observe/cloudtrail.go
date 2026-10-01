@@ -44,10 +44,9 @@ func (o *Observer) CollectEvents(ctx context.Context, role Role, start, end time
 // the aggregated calls, denials, warnings and stats.
 //
 // An event is used only if its session issuer is exactly the role's ARN; the
-// same username from another role is ignored. Events made by an AWS service on
-// the role's behalf (userIdentity.invokedBy set, e.g. Lambda decrypting its
-// environment or creating log streams) are excluded and summarised as a
-// warning: they describe the platform, not the function's code.
+// same username from another role is ignored. Calls made by AWS rather than
+// by the function's code are excluded and summarised as a warning; see
+// platformCaller.
 func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time) (EventsResult, error) {
 	var res EventsResult
 	w, warnings, err := o.clampWindow(start, end)
@@ -60,7 +59,7 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 	type key struct{ action, resource string }
 	calls := map[key]*ObservedCall{}
 	otherIssuers := 0
-	serviceInvoked := map[string]int{}
+	platformCalls := map[string]int{}
 
 	in := &cloudtrail.LookupEventsInput{
 		LookupAttributes: []cttypes.LookupAttribute{{
@@ -90,8 +89,8 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 				continue
 			}
 			action, actionWarning := ActionFor(ev.EventSource, ev.EventName)
-			if by := ev.UserIdentity.InvokedBy; by != "" {
-				serviceInvoked[action+" by "+by]++
+			if by := platformCaller(ev); by != "" {
+				platformCalls[action+" by "+by]++
 				continue
 			}
 			if actionWarning != "" {
@@ -143,8 +142,8 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 	if otherIssuers > 0 {
 		warn.add(fmt.Sprintf("ignored %d event(s) with username %s but a different session issuer than %s", otherIssuers, role.FunctionName, role.ARN))
 	}
-	for what, n := range serviceInvoked {
-		warn.add(fmt.Sprintf("excluded %d service-invoked call(s): %s (made by the AWS service for the role, not by the function's code)", n, what))
+	for what, n := range platformCalls {
+		warn.add(fmt.Sprintf("excluded %d platform call(s): %s (made by AWS with the role's credentials, not by the function's code)", n, what))
 	}
 
 	res.Calls = make([]ObservedCall, 0, len(calls))
@@ -160,6 +159,39 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 		"pages", res.Stats.PagesFetched, "events", res.Stats.EventsScanned,
 		"calls", len(res.Calls), "denied", len(res.Denied))
 	return res, nil
+}
+
+// lambdaWorkerAgent is the user agent of the Lambda runtime's own calls.
+const lambdaWorkerAgent = "awslambda-worker"
+
+// platformCaller names who made a call when it was AWS rather than the
+// function's code, or returns "" for the function's own calls. Seen in this
+// account's event history (PROGRESS.md, Day 1 and Day 2 findings):
+//
+//   - userIdentity.invokedBy set: a service calling downstream on the role's
+//     behalf, e.g. Lambda decrypting other functions' environment variables to
+//     answer the role's own lambda:ListFunctions.
+//   - user agent awslambda-worker: the Lambda runtime creating the function's
+//     log stream at cold start (allowed by AWSLambdaBasicExecutionRole, which
+//     the autopilot never edits).
+//   - kms:Decrypt with the aws:lambda:FunctionArn encryption context: the
+//     Lambda runtime decrypting the function's own environment variables at
+//     cold start. It succeeds without any kms permission on the role.
+func platformCaller(ev trailEvent) string {
+	if by := ev.UserIdentity.InvokedBy; by != "" {
+		return by
+	}
+	if strings.HasPrefix(ev.UserAgent, lambdaWorkerAgent) {
+		return "the Lambda runtime (" + lambdaWorkerAgent + ")"
+	}
+	if ev.EventSource == "kms.amazonaws.com" && ev.EventName == "Decrypt" {
+		if ctx, ok := ev.RequestParameters["encryptionContext"].(map[string]any); ok {
+			if _, ok := ctx["aws:lambda:FunctionArn"]; ok {
+				return "the Lambda runtime (environment variable decryption)"
+			}
+		}
+	}
+	return ""
 }
 
 // clampWindow moves start forward to the 90-day event history limit, caps end

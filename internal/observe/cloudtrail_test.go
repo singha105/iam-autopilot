@@ -108,22 +108,37 @@ func TestCollectIgnoresOtherSessionIssuers(t *testing.T) {
 	}
 }
 
-func TestCollectExcludesServiceInvokedCalls(t *testing.T) {
+func TestCollectExcludesPlatformCalls(t *testing.T) {
+	lambdaEnv := map[string]any{"encryptionContext": map[string]any{"aws:lambda:FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-inventory"}}
+	javaSDK := "aws-sdk-java/2.55.2 api/KMS#2.55.x"
 	ct := &fakeCloudTrail{pages: [][]cttypes.Event{{
-		ev{source: "kms.amazonaws.com", name: "Decrypt", invokedBy: "lambda.amazonaws.com"}.event(t),
-		ev{source: "kms.amazonaws.com", name: "Decrypt", invokedBy: "lambda.amazonaws.com"}.event(t),
-		ev{source: "logs.amazonaws.com", name: "CreateLogStream", invokedBy: "lambda.amazonaws.com"}.event(t),
-		ev{source: "iam.amazonaws.com", name: "ListRoles"}.event(t),
+		// A service calling downstream for the role (invokedBy).
+		ev{source: "kms.amazonaws.com", name: "Decrypt", invokedBy: "lambda.amazonaws.com", params: lambdaEnv}.event(t),
+		ev{source: "kms.amazonaws.com", name: "Decrypt", invokedBy: "lambda.amazonaws.com", params: lambdaEnv}.event(t),
+		// The Lambda runtime at cold start: no invokedBy.
+		ev{source: "logs.amazonaws.com", name: "CreateLogStream", userAgent: "awslambda-worker/1.0", params: map[string]any{"logGroupName": "/aws/lambda/iamap-demo-inventory"}}.event(t),
+		ev{source: "kms.amazonaws.com", name: "Decrypt", userAgent: javaSDK, params: lambdaEnv}.event(t),
+		// The function's own calls are kept, including its own kms:Decrypt.
+		ev{source: "iam.amazonaws.com", name: "ListRoles", userAgent: "aws-sdk-go-v2/1.47.1"}.event(t),
+		ev{source: "kms.amazonaws.com", name: "Decrypt", userAgent: "aws-sdk-go-v2/1.47.1", params: map[string]any{"encryptionContext": map[string]any{"app": "x"}}}.event(t),
 	}}}
 	o, _ := testObserver(ct, nil)
 	res, err := o.Collect(context.Background(), testRole, testNow.Add(-day(1)), testNow)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(res.Calls) != 1 || res.Calls[0].Action != "iam:ListRoles" {
-		t.Errorf("calls = %+v, want only iam:ListRoles", res.Calls)
+	var got []string
+	for _, c := range res.Calls {
+		got = append(got, c.Action)
 	}
-	for _, want := range []string{"excluded 2 service-invoked call(s): kms:Decrypt by lambda.amazonaws.com", "excluded 1 service-invoked call(s): logs:CreateLogStream by lambda.amazonaws.com"} {
+	if want := []string{"iam:ListRoles", "kms:Decrypt"}; !reflect.DeepEqual(got, want) {
+		t.Errorf("actions = %v, want %v", got, want)
+	}
+	for _, want := range []string{
+		"excluded 2 platform call(s): kms:Decrypt by lambda.amazonaws.com",
+		"excluded 1 platform call(s): logs:CreateLogStream by the Lambda runtime (awslambda-worker)",
+		"excluded 1 platform call(s): kms:Decrypt by the Lambda runtime (environment variable decryption)",
+	} {
 		if !containsSubstring(res.Warnings, want) {
 			t.Errorf("warnings = %v, want %q", res.Warnings, want)
 		}

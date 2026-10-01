@@ -1,0 +1,88 @@
+{
+  "roleArn": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+  "roleName": "iamap-demo-config-reader-role",
+  "functionName": "iamap-demo-config-reader",
+  "window": {
+    "start": "2026-07-03T00:36:25Z",
+    "end": "2026-10-01T00:36:25Z"
+  },
+  "observedCalls": [
+    {
+      "action": "dynamodb:DescribeTable",
+      "resource": "arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:37Z",
+      "lastSeen": "2026-09-29T18:18:08Z",
+      "readOnly": true
+    },
+    {
+      "action": "ssm:GetParameter",
+      "resource": "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:37Z",
+      "lastSeen": "2026-09-29T18:18:08Z",
+      "readOnly": true
+    }
+  ],
+  "servicesAccessed": [
+    {
+      "namespace": "dynamodb",
+      "lastAuthenticated": "2026-09-29T18:18:08Z",
+      "trackedActions": [
+        {
+          "action": "dynamodb:DescribeTable",
+          "lastAccessed": "2026-09-29T18:18:08Z"
+        }
+      ]
+    },
+    {
+      "namespace": "kms",
+      "lastAuthenticated": "2026-09-29T18:12:36Z",
+      "trackedActions": [
+        {
+          "action": "kms:Decrypt",
+          "lastAccessed": "2026-09-29T18:12:36Z"
+        }
+      ]
+    },
+    {
+      "namespace": "logs",
+      "lastAuthenticated": "2026-09-29T18:18:15Z",
+      "trackedActions": [
+        {
+          "action": "logs:CreateLogStream",
+          "lastAccessed": "2026-09-29T18:12:39Z"
+        }
+      ]
+    },
+    {
+      "namespace": "sns",
+      "lastAuthenticated": null,
+      "trackedActions": []
+    },
+    {
+      "namespace": "sqs",
+      "lastAuthenticated": null,
+      "trackedActions": []
+    },
+    {
+      "namespace": "ssm",
+      "lastAuthenticated": "2026-09-29T18:18:08Z",
+      "trackedActions": [
+        {
+          "action": "ssm:GetParameter",
+          "lastAccessed": "2026-09-29T18:18:08Z"
+        }
+      ]
+    }
+  ],
+  "deniedCalls": [],
+  "warnings": [
+    "excluded 1 platform call(s): kms:Decrypt by the Lambda runtime (environment variable decryption) (made by AWS with the role's credentials, not by the function's code)",
+    "excluded 1 platform call(s): logs:CreateLogStream by the Lambda runtime (awslambda-worker) (made by AWS with the role's credentials, not by the function's code)"
+  ],
+  "stats": {
+    "eventsScanned": 42,
+    "pagesFetched": 1
+  }
+}

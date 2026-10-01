@@ -1,0 +1,122 @@
+{
+  "roleArn": "arn:aws:iam::123456789012:role/iamap-demo-inventory-role",
+  "roleName": "iamap-demo-inventory-role",
+  "functionName": "iamap-demo-inventory",
+  "window": {
+    "start": "2026-07-03T00:36:18Z",
+    "end": "2026-10-01T00:36:18Z"
+  },
+  "observedCalls": [
+    {
+      "action": "ec2:DescribeInstances",
+      "resource": "*",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:32Z",
+      "lastSeen": "2026-09-29T18:18:06Z",
+      "readOnly": true
+    },
+    {
+      "action": "ec2:DescribeRegions",
+      "resource": "*",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:32Z",
+      "lastSeen": "2026-09-29T18:18:06Z",
+      "readOnly": true
+    },
+    {
+      "action": "iam:ListRoles",
+      "resource": "*",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:32Z",
+      "lastSeen": "2026-09-29T18:18:06Z",
+      "readOnly": true
+    },
+    {
+      "action": "lambda:ListFunctions",
+      "resource": "*",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:32Z",
+      "lastSeen": "2026-09-29T18:18:06Z",
+      "readOnly": true
+    },
+    {
+      "action": "s3:ListAllMyBuckets",
+      "resource": "*",
+      "count": 20,
+      "firstSeen": "2026-09-29T18:12:32Z",
+      "lastSeen": "2026-09-29T18:18:06Z",
+      "readOnly": true
+    }
+  ],
+  "servicesAccessed": [
+    {
+      "namespace": "ec2",
+      "lastAuthenticated": "2026-09-29T18:18:06Z",
+      "trackedActions": [
+        {
+          "action": "ec2:DescribeRegions",
+          "lastAccessed": "2026-09-29T18:18:06Z"
+        }
+      ]
+    },
+    {
+      "namespace": "iam",
+      "lastAuthenticated": "2026-09-29T18:18:06Z",
+      "trackedActions": [
+        {
+          "action": "iam:ListRoles",
+          "lastAccessed": "2026-09-29T18:18:06Z"
+        }
+      ]
+    },
+    {
+      "namespace": "lambda",
+      "lastAuthenticated": "2026-09-29T18:18:06Z",
+      "trackedActions": [
+        {
+          "action": "lambda:ListFunctions",
+          "lastAccessed": "2026-09-29T18:18:06Z"
+        }
+      ]
+    },
+    {
+      "namespace": "logs",
+      "lastAuthenticated": "2026-09-29T18:18:12Z",
+      "trackedActions": [
+        {
+          "action": "logs:CreateLogStream",
+          "lastAccessed": "2026-09-29T18:12:31Z"
+        }
+      ]
+    },
+    {
+      "namespace": "s3",
+      "lastAuthenticated": "2026-09-29T18:18:06Z",
+      "trackedActions": [
+        {
+          "action": "s3:ListAllMyBuckets",
+          "lastAccessed": "2026-09-29T18:18:06Z"
+        }
+      ]
+    },
+    {
+      "namespace": "sns",
+      "lastAuthenticated": null,
+      "trackedActions": []
+    },
+    {
+      "namespace": "sqs",
+      "lastAuthenticated": null,
+      "trackedActions": []
+    }
+  ],
+  "deniedCalls": [],
+  "warnings": [
+    "excluded 1 platform call(s): logs:CreateLogStream by the Lambda runtime (awslambda-worker) (made by AWS with the role's credentials, not by the function's code)",
+    "excluded 40 platform call(s): kms:Decrypt by lambda.amazonaws.com (made by AWS with the role's credentials, not by the function's code)"
+  ],
+  "stats": {
+    "eventsScanned": 141,
+    "pagesFetched": 3
+  }
+}

@@ -20,6 +20,7 @@ type trailEvent struct {
 	AWSRegion          string         `json:"awsRegion"`
 	RecipientAccountID string         `json:"recipientAccountId"`
 	ErrorCode          string         `json:"errorCode"`
+	UserAgent          string         `json:"userAgent"`
 	ReadOnly           *bool          `json:"readOnly"`
 	RequestParameters  map[string]any `json:"requestParameters"`
 	UserIdentity       struct {

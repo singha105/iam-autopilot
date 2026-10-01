@@ -1,0 +1,23 @@
+{
+  "Tags": [
+    {
+      "Key": "autopilot:function",
+      "Value": "iamap-demo-config-reader"
+    },
+    {
+      "Key": "autopilot:managed",
+      "Value": "true"
+    },
+    {
+      "Key": "Project",
+      "Value": "iam-autopilot"
+    },
+    {
+      "Key": "ManagedBy",
+      "Value": "terraform"
+    }
+  ],
+  "IsTruncated": false,
+  "Marker": null,
+  "ResultMetadata": {}
+}

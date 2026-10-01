@@ -1,0 +1,40 @@
+{
+  "Role": {
+    "Arn": "arn:aws:iam::123456789012:role/iamap-demo-config-reader-role",
+    "CreateDate": "2026-09-29T18:11:54Z",
+    "Path": "/",
+    "RoleId": "AROA6OKO2XL2XSOTJ5KTR",
+    "RoleName": "iamap-demo-config-reader-role",
+    "AssumeRolePolicyDocument": "%7B%22Version%22%3A%222012-10-17%22%2C%22Statement%22%3A%5B%7B%22Effect%22%3A%22Allow%22%2C%22Principal%22%3A%7B%22Service%22%3A%22lambda.amazonaws.com%22%7D%2C%22Action%22%3A%22sts%3AAssumeRole%22%7D%5D%7D",
+    "Description": "Demo role for iamap-demo-config-reader; its /iamap/managed/ policy is tightened by the autopilot.",
+    "MaxSessionDuration": 3600,
+    "PermissionsBoundary": {
+      "PermissionsBoundaryArn": "arn:aws:iam::123456789012:policy/iamap/boundary/iamap-demo-boundary",
+      "PermissionsBoundaryType": "Policy"
+    },
+    "RoleLastUsed": {
+      "LastUsedDate": "2026-09-29T18:18:15Z",
+      "Region": "us-east-1"
+    },
+    "SourceRoleTemplate": null,
+    "Tags": [
+      {
+        "Key": "autopilot:function",
+        "Value": "iamap-demo-config-reader"
+      },
+      {
+        "Key": "autopilot:managed",
+        "Value": "true"
+      },
+      {
+        "Key": "Project",
+        "Value": "iam-autopilot"
+      },
+      {
+        "Key": "ManagedBy",
+        "Value": "terraform"
+      }
+    ]
+  },
+  "ResultMetadata": {}
+}

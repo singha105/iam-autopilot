@@ -1,0 +1,573 @@
+{
+  "Events": [
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:08Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"4b72b71f-1c68-4239-9a5f-9823b9a9283b\",\"eventID\":\"232c6094-291c-44aa-a008-7046594a2503\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "232c6094-291c-44aa-a008-7046594a2503",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:08Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:08Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"2SJ6EMQEISVGADSR9M73P5NCMVVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"41ca13d6-c4bf-4758-9612-0e7b22e646da\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "41ca13d6-c4bf-4758-9612-0e7b22e646da",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:08Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:08Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"a1136811-78e7-423d-8582-7805e9c11d53\",\"eventID\":\"976c5fdf-10b4-4277-8849-1cc449ee21ca\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "976c5fdf-10b4-4277-8849-1cc449ee21ca",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:08Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:08Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"BIC09VDMTH4N1F5OMOCKSRHSQNVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"a24e86fb-727d-496e-aa8d-2224c61b1fd9\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "a24e86fb-727d-496e-aa8d-2224c61b1fd9",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:08Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:07Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"f720636e-58dd-4f32-b870-522e603eb21c\",\"eventID\":\"0274c6e3-c55f-4e41-ac0b-c8b70e0600da\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "0274c6e3-c55f-4e41-ac0b-c8b70e0600da",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:07Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:07Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"R4B5794KUIP0Q3Q9TDOEMPMPTRVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"2194f463-cf03-43db-9790-1bf0a0243c0d\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "2194f463-cf03-43db-9790-1bf0a0243c0d",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:07Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:07Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"7776A7E1K9PTNFN76S7GP7ICNVVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"88fe276c-78a4-4903-997c-4da4eaa91cf7\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "88fe276c-78a4-4903-997c-4da4eaa91cf7",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:07Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:07Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"771cc46d-191f-4001-8f4e-8a56a2c928f2\",\"eventID\":\"896904d0-8a2c-48a2-bfb1-b5156425db6a\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "896904d0-8a2c-48a2-bfb1-b5156425db6a",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:07Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:07Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"9A8R8ERH9JV1R39DE37PJFVH63VV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"fbedfd61-557f-4b41-826c-acf93cf2a9dc\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "fbedfd61-557f-4b41-826c-acf93cf2a9dc",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:07Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:18:06Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"a4bb78c5-b393-48a9-a965-1f68bc13c13f\",\"eventID\":\"14e8588f-9934-46b8-adf6-7da13483d5fe\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "14e8588f-9934-46b8-adf6-7da13483d5fe",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:18:06Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:28Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"1ANEIJQB8O7L3J083BQT7PQ7SFVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"4614778d-32ae-49b7-8caa-1874f2e97b4e\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "4614778d-32ae-49b7-8caa-1874f2e97b4e",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:28Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:28Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"e5842cac-ef55-4d60-be5c-7c29c7efe4d8\",\"eventID\":\"667b1efd-5223-486f-837d-8c7e496dcacc\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "667b1efd-5223-486f-837d-8c7e496dcacc",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:28Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:28Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"AJ0T7OK8SFSMMBJUG3NN6CC52BVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"95171514-b867-48fe-8cd7-2ce9203a9e92\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "95171514-b867-48fe-8cd7-2ce9203a9e92",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:28Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:28Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"8291fd68-67be-4d15-b991-b26b7614228e\",\"eventID\":\"d391a4cd-1b8d-412b-a601-b76ba0ea5f04\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "d391a4cd-1b8d-412b-a601-b76ba0ea5f04",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:28Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:27Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"633b4f38-80ac-41ce-b4e3-3ad72cc7aead\",\"eventID\":\"319118b6-9fc3-4fcb-a657-b97eb2099caa\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "319118b6-9fc3-4fcb-a657-b97eb2099caa",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:27Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:27Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"KE4BJDF4OJK8MS4G3FT3F45LRBVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"68d75710-ec05-467c-908c-3f92ea18877d\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "68d75710-ec05-467c-908c-3f92ea18877d",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:27Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:27Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"JKS416V0BGQMSUAO4101DF8JINVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"9d0d0087-e116-4a56-b0d9-46f2b6a4cb65\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "9d0d0087-e116-4a56-b0d9-46f2b6a4cb65",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:27Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:27Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"a3234615-7836-4837-9208-219925552202\",\"eventID\":\"de997d23-b218-4c04-942e-d3f4c0cd845c\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "de997d23-b218-4c04-942e-d3f4c0cd845c",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:27Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:26Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"O5UOGCFCK6SO08L4UORGGAL9IRVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"321c1e28-2698-431c-b072-822ecae27af9\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "321c1e28-2698-431c-b072-822ecae27af9",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:26Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:26Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"1215c610-1124-4778-b56e-2b8989b9e52f\",\"eventID\":\"36b615cf-d9cd-49f6-b346-f43d5cd69838\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "36b615cf-d9cd-49f6-b346-f43d5cd69838",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:26Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:19Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"TI88AFAOVV0U81HQQN6K4MH0HJVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"3340ba81-38b1-4300-b0fa-ff77b8c8b959\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "3340ba81-38b1-4300-b0fa-ff77b8c8b959",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:19Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:19Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"74cf7a63-6dde-46b7-8488-d44db09d7fb6\",\"eventID\":\"389dec81-cf9e-4f94-994b-eb91daace15f\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "389dec81-cf9e-4f94-994b-eb91daace15f",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:19Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:19Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"a5ab5bbf-4e92-49ce-ad4b-16e6157023e7\",\"eventID\":\"92661b68-0c8a-48a9-b8f6-4d339d611be5\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "92661b68-0c8a-48a9-b8f6-4d339d611be5",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:19Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:19Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"72O951INT056HPVP760FKL0477VV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"c9796cb9-aed3-48be-a390-c192f8f7a3e7\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "c9796cb9-aed3-48be-a390-c192f8f7a3e7",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:19Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:18Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"78a6ef35-6fa8-45a7-97f9-84bc71aa5e2a\",\"eventID\":\"154e96a9-838d-40b2-83c4-def9441fae79\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "154e96a9-838d-40b2-83c4-def9441fae79",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:18Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:18Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"48720488-0860-4c11-9fa5-395b04baa2d3\",\"eventID\":\"29776856-0971-46c7-9d48-adbe71246b77\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "29776856-0971-46c7-9d48-adbe71246b77",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:18Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:18Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"IHF2BC4QB9D8468RJI6S9KC91VVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"be1da22e-f625-4f15-916f-c2c237b1afa8\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "be1da22e-f625-4f15-916f-c2c237b1afa8",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:18Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:18Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"3SQ1G6GQJUJ65VGRH34T6PHUUNVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"d9e63438-62f3-4ff2-b68d-601ed68b14ed\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "d9e63438-62f3-4ff2-b68d-601ed68b14ed",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:18Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:17Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"8307b40e-ca77-4a63-8b25-b21b486b4735\",\"eventID\":\"2e967050-db65-4d05-9d14-1333bb050199\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "2e967050-db65-4d05-9d14-1333bb050199",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:17Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:15:17Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"14VP4V378UPQOL5TPA9PHBR2QFVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"5ea32500-aa72-44c4-b29a-55f2b022bcc6\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "5ea32500-aa72-44c4-b29a-55f2b022bcc6",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:15:17Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:39Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"6b893893-0535-4608-a352-e5227a25fa3c\",\"eventID\":\"1c301f50-d2ab-4ebc-b9b5-463812baa33c\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "1c301f50-d2ab-4ebc-b9b5-463812baa33c",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:39Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:39Z\",\"eventSource\":\"logs.amazonaws.com\",\"eventName\":\"CreateLogStream\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"awslambda-worker/1.0\",\"requestParameters\":{\"logGroupName\":\"/aws/lambda/iamap-demo-config-reader\",\"logStreamName\":\"2026/09/29/[$LATEST]407f3097ebab4563a7174cfc2386a92b\"},\"responseElements\":null,\"requestID\":\"2a46b90a-dcef-40ce-b2de-498320899846\",\"eventID\":\"a981df7e-0d03-42ec-a66f-75e16032237e\",\"readOnly\":false,\"eventType\":\"AwsApiCall\",\"apiVersion\":\"20140328\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"logs.us-east-1.amazonaws.com\"}}",
+      "EventId": "a981df7e-0d03-42ec-a66f-75e16032237e",
+      "EventName": "CreateLogStream",
+      "EventSource": "logs.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:39Z",
+      "ReadOnly": "false",
+      "Resources": [
+        {
+          "ResourceName": "/aws/lambda/iamap-demo-config-reader",
+          "ResourceType": "AWS::Logs::LogGroup"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:39Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"f74d3575-2319-4dba-b81c-60b254322ab9\",\"eventID\":\"b6947f7c-3882-4164-8c81-4c790891bff3\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "b6947f7c-3882-4164-8c81-4c790891bff3",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:39Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:39Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"DLNRKEEE3VA07L8PAIUG9U4S23VV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"b702ccbb-a2d6-4b6f-aaa2-5c783c0dc8cf\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "b702ccbb-a2d6-4b6f-aaa2-5c783c0dc8cf",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:39Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:39Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"13NK1QT2G33PAUKIKEUCO7NI93VV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"ecd70697-8532-4600-878e-1a8b6750edb5\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "ecd70697-8532-4600-878e-1a8b6750edb5",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:39Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:38Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"dc7de65c-2e6d-44cd-93e1-117b22c6c9df\",\"eventID\":\"16d156eb-a8f9-4920-a79f-3b5658d4dfac\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "16d156eb-a8f9-4920-a79f-3b5658d4dfac",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:38Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:38Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"J2PJ307Q3JUTCH4DDLDCUCNPDFVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"1e703547-702d-4751-8791-1d0e4519fc09\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "1e703547-702d-4751-8791-1d0e4519fc09",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:38Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:38Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"bad21c86-a656-4ac8-8b00-b2b3794c3e7c\",\"eventID\":\"32c71aa7-d46e-4e6b-bf44-46b3ca128dc6\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "32c71aa7-d46e-4e6b-bf44-46b3ca128dc6",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:38Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:38Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"P50FF9F64T1HM1AI7QSHQO36BRVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"e214e1d6-6cb6-45b2-a5c5-e826ef189ab6\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "e214e1d6-6cb6-45b2-a5c5-e826ef189ab6",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:38Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:37Z\",\"eventSource\":\"ssm.amazonaws.com\",\"eventName\":\"GetParameter\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/ssm#1.79.0 m/E,g\",\"requestParameters\":{\"name\":\"/iamap/demo/config\"},\"responseElements\":null,\"requestID\":\"0dd22194-8e2b-4694-a003-e9ef7fc30296\",\"eventID\":\"b3fa084a-77be-40ac-9241-9f372ead9e92\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"ARN\":\"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.2\",\"cipherSuite\":\"ECDHE-RSA-AES128-GCM-SHA256\",\"clientProvidedHostHeader\":\"ssm.us-east-1.amazonaws.com\"}}",
+      "EventId": "b3fa084a-77be-40ac-9241-9f372ead9e92",
+      "EventName": "GetParameter",
+      "EventSource": "ssm.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:37Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}},\"inScopeOf\":{\"issuerType\":\"AWS::Lambda::Function\",\"credentialsIssuedTo\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\",\"credentialsIssuedToVersion\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader:$LATEST\"}},\"eventTime\":\"2026-09-29T18:12:37Z\",\"eventSource\":\"dynamodb.amazonaws.com\",\"eventName\":\"DescribeTable\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"98.93.202.156\",\"userAgent\":\"aws-sdk-go-v2/1.47.1 ua/2.1 os/linux lang/go#1.27.0 md/GOOS#linux md/GOARCH#arm64 exec-env/AWS_Lambda_provided.al2023 api/dynamodb#1.69.1 m/E,P,g\",\"requestParameters\":{\"tableName\":\"iamap-demo-config\"},\"responseElements\":null,\"requestID\":\"AM2MH73IKPH45NFDE3I7I28TNNVV4KQNSO5AEMVJF66Q9ASUAAJG\",\"eventID\":\"cfeb07b8-cad1-45e6-b34a-6a7781fdffb5\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::DynamoDB::Table\",\"ARN\":\"arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config\"}],\"eventType\":\"AwsApiCall\",\"apiVersion\":\"2012-08-10\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"dynamodb.us-east-1.amazonaws.com\"}}",
+      "EventId": "cfeb07b8-cad1-45e6-b34a-6a7781fdffb5",
+      "EventName": "DescribeTable",
+      "EventSource": "dynamodb.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:37Z",
+      "ReadOnly": "true",
+      "Resources": [
+        {
+          "ResourceName": "iamap-demo-config",
+          "ResourceType": "AWS::DynamoDB::Table"
+        }
+      ],
+      "Username": "iamap-demo-config-reader"
+    },
+    {
+      "AccessKeyId": "ASIAIOSFODNN7EXAMPLE",
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR:iamap-demo-config-reader\",\"arn\":\"arn:aws:sts::123456789012:assumed-role/iamap-demo-config-reader-role/iamap-demo-config-reader\",\"accountId\":\"123456789012\",\"accessKeyId\":\"ASIAIOSFODNN7EXAMPLE\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROA6OKO2XL2XSOTJ5KTR\",\"arn\":\"arn:aws:iam::123456789012:role/iamap-demo-config-reader-role\",\"accountId\":\"123456789012\",\"userName\":\"iamap-demo-config-reader-role\"},\"attributes\":{\"creationDate\":\"2026-09-29T18:12:36Z\",\"mfaAuthenticated\":\"false\"}}},\"eventTime\":\"2026-09-29T18:12:36Z\",\"eventSource\":\"kms.amazonaws.com\",\"eventName\":\"Decrypt\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"3.239.49.253\",\"userAgent\":\"aws-sdk-java/2.53.3 md/io#async md/http#AwsCommonRuntime ua/2.1 api/KMS#2.53.x os/Linux#5.10.265-265.1078.amzn2.x86_64 lang/java#25.0.4.1 md/OpenJDK_64-Bit_Server_VM#25.0.4.1+8-LTS md/vendor#Amazon.com_Inc. md/en_US m/E,AL\",\"requestParameters\":{\"encryptionContext\":{\"aws:lambda:FunctionArn\":\"arn:aws:lambda:us-east-1:123456789012:function:iamap-demo-config-reader\"},\"encryptionAlgorithm\":\"SYMMETRIC_DEFAULT\"},\"responseElements\":null,\"additionalEventData\":{\"keyMaterialId\":\"7c7955d2ed8bd880b030c6dc941d7b66b23fc4c5e762a1d5e49764b112adfd34\"},\"requestID\":\"ae1b3c23-512f-49f0-9736-920c08d3dc81\",\"eventID\":\"7d02540e-258f-4e37-b86b-da3a5a205403\",\"readOnly\":true,\"resources\":[{\"accountId\":\"123456789012\",\"type\":\"AWS::KMS::Key\",\"ARN\":\"arn:aws:kms:us-east-1:123456789012:key/beedb28d-1bc2-4fec-b8a9-b0f184178645\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"123456789012\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_256_GCM_SHA384\",\"clientProvidedHostHeader\":\"kms.us-east-1.amazonaws.com\",\"keyExchange\":\"X25519MLKEM768\"}}",
+      "EventId": "7d02540e-258f-4e37-b86b-da3a5a205403",
+      "EventName": "Decrypt",
+      "EventSource": "kms.amazonaws.com",
+      "EventTime": "2026-09-29T18:12:36Z",
+      "ReadOnly": "true",
+      "Resources": [],
+      "Username": "iamap-demo-config-reader"
+    }
+  ],
+  "NextToken": null,
+  "ResultMetadata": {}
+}
