@@ -13,7 +13,7 @@ Read this and CLAUDE.md at the start of every session.
 - [x] scripts/traffic.sh and scripts/cost-audit.sh
 - [x] CI workflow (lint, test, build, terraform fmt/validate; no AWS credentials)
 - [x] `make check` passes locally
-- [ ] CI green on GitHub (checked right after the Day 1 push; see the Actions tab)
+- [x] CI green on GitHub (run 36611828078, both jobs passed)
 - [x] Deployed with `make apply` (24 resources); budget `iamap-zero-spend` exists
 - [x] `make traffic` prints OK for all 15 calls: runs at 18:12Z, 18:15Z and 18:18Z, 15/15 each
   (one extra back-to-back run at 18:15Z, output not kept)
@@ -22,10 +22,18 @@ Read this and CLAUDE.md at the start of every session.
 - [x] `make cost-audit` passes
 - [x] terraform.tfstate, terraform.tfvars and build/ not in git (`git ls-files`)
 
-## Day 2
+## Day 2: Observation engine (2026-09-30)
 
 - [ ] Run `make traffic` first
-- [ ] (Day 2 prompt)
+- [ ] internal/observe: CloudTrailAPI / IAMAPI interfaces, ResolveRole (refuses untagged roles)
+- [ ] CloudTrail event history collector: rate limit 1.5 req/s, throttling retry, 90-day clamp,
+      session-issuer filter, event -> IAM action mapping, resource ARNs, denied calls
+- [ ] Access Advisor collector (ACTION_LEVEL, poll, pagination)
+- [ ] BuildProfile with deterministic JSON
+- [ ] `autopilot observe` CLI; ADR-001 (CLI library)
+- [ ] Redacted fixtures under testdata/observe/<role>/ and golden-file test (-update)
+- [ ] `autopilot observe` matches the expected actions for all three demo roles
+- [ ] Tests pass with AWS credentials unset; real account ID absent from the repo
 
 ## Day 3
 
