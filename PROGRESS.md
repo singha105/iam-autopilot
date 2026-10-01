@@ -22,18 +22,23 @@ Read this and CLAUDE.md at the start of every session.
 - [x] `make cost-audit` passes
 - [x] terraform.tfstate, terraform.tfvars and build/ not in git (`git ls-files`)
 
-## Day 2: Observation engine (2026-09-30)
+## Day 2: Observation engine (2026-09-30 / 10-01)
 
-- [ ] Run `make traffic` first
-- [ ] internal/observe: CloudTrailAPI / IAMAPI interfaces, ResolveRole (refuses untagged roles)
-- [ ] CloudTrail event history collector: rate limit 1.5 req/s, throttling retry, 90-day clamp,
-      session-issuer filter, event -> IAM action mapping, resource ARNs, denied calls
-- [ ] Access Advisor collector (ACTION_LEVEL, poll, pagination)
-- [ ] BuildProfile with deterministic JSON
-- [ ] `autopilot observe` CLI; ADR-001 (CLI library)
-- [ ] Redacted fixtures under testdata/observe/<role>/ and golden-file test (-update)
-- [ ] `autopilot observe` matches the expected actions for all three demo roles
-- [ ] Tests pass with AWS credentials unset; real account ID absent from the repo
+- [x] Run `make traffic` first (15/15 OK at 2026-10-01T00:36Z)
+- [x] internal/observe: CloudTrailAPI / IAMAPI interfaces, ResolveRole (refuses untagged roles;
+      verified live against AWSServiceRoleForResourceExplorer)
+- [x] CloudTrail event history collector: rate limit 1.5 req/s, throttling retry (5 tries, backoff
+      0.5s doubling), 90-day clamp, session-issuer filter, event -> IAM action mapping, resource ARNs,
+      denied calls
+- [x] Access Advisor collector (ACTION_LEVEL, 2s poll up to 60s, Marker pagination)
+- [x] BuildProfile with deterministic JSON (shuffled-input test, byte-identical)
+- [x] `autopilot observe` CLI; ADR-001 (standard library flag) and ADR-002 (platform calls)
+- [x] Redacted fixtures under testdata/observe/<role>/ (recorded with `--record`) and golden-file
+      test (`go test ./internal/observe -update` regenerates expected-profile.json)
+- [x] `autopilot observe` matches the expected actions for all three demo roles (live, 2026-10-01)
+- [x] Tests pass with AWS credentials unset; real account ID absent from the repo (0 matches)
+- [x] `make check` passes; pushed
+- [ ] CI green on GitHub for the Day 2 head (checked right after the push; tick in Day 3's first commit)
 
 ## Day 3
 
@@ -60,16 +65,32 @@ Read this and CLAUDE.md at the start of every session.
   (The only OIDC provider in the account is Paved's leftover S3-hosted eu-west-2 one; leave it alone.)
 - Budgets before Day 1: none. `iamap-zero-spend` is the only budget ($0.01/month, email on ACTUAL > $0.01).
 - CloudTrail trails in the account: 0. Event history works without one.
-- Go module targets `go 1.25.0`. aws-lambda-go is pinned to v1.54.0 because v1.55+ requires Go 1.26.
+- Go module targets `go 1.25.0`. aws-lambda-go is pinned to v1.54.0 and golang.org/x/time to v0.15.0
+  because newer releases require Go 1.26. Check `go.mod` after every `go get`.
 
 ## Findings for later days
 
-- **Service-made events under the role session (Day 2 observer).** Event history shows `kms:Decrypt`
+- **Lambda runtime calls have no invokedBy (Day 2).** At each cold start the role's session makes
+  logs:CreateLogStream (user agent `awslambda-worker/1.0`) and kms:Decrypt of the function's own
+  environment variables (encryption context `aws:lambda:FunctionArn`, from a Java SDK). The observer
+  excludes both, plus every invokedBy call, and counts them in warnings (ADR-002). kms:Decrypt needs
+  no permission on the role (quarterly has none and it succeeds); CreateLogStream comes from
+  AWSLambdaBasicExecutionRole, which the autopilot never edits.
+- **ListFunctions triggers Decrypt of other functions' variables (Day 2).** The 2 invokedBy Decrypt
+  calls per inventory run decrypt config-reader's and quarterly's environment variables: Lambda
+  does that to answer inventory's lambda:ListFunctions, using inventory's credentials.
+- **Access Advisor lag seen live (Day 2).** At 00:39Z it showed iam used at 00:35:59Z but still
+  reported ec2/s3/lambda last used on Sep 29, while event history already had the 00:36Z calls.
+- **Day 3 generator:** logs:* in quarterly.json duplicates AWSLambdaBasicExecutionRole; the
+  generated policy should not need any logs action. The ssm path resource is recorded without its
+  trailing slash (parameter/iamap/demo/quarterly); confirm with the policy simulator on Day 4.
+
+- **Service-made events under the role session (Day 2 observer; handled, see ADR-002).** Event history shows `kms:Decrypt`
   with `Username=iamap-demo-inventory` even though the app never calls KMS. The record has
   `userIdentity.invokedBy`, `userAgent` and `sourceIPAddress` all equal to `lambda.amazonaws.com`: it is
   the Lambda service acting for the function. The observer must drop events whose `invokedBy` is an AWS
   service, or the generator would keep `kms:Decrypt` for no reason.
-- **Event names are not always IAM action names (Day 2 observer).** Lambda's ListFunctions is recorded
+- **Event names are not always IAM action names (Day 2 observer; handled in mapping.go).** Lambda's ListFunctions is recorded
   as `ListFunctions20150331` (API version suffix). The observer needs an eventName -> IAM action
   normalisation step (strip Lambda's date suffixes; check other services in the recorded fixtures).
 - **Blind spot confirmed (Day 3).** After run 1, event history for iamap-demo-config-reader shows
@@ -80,4 +101,4 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Next
 
-- Day 2: run `make traffic`, then paste the Day 2 prompt.
+- Day 3: run `aws login --profile paved` and `make traffic`, then paste the Day 3 prompt.

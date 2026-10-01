@@ -18,9 +18,10 @@ anything gets denied.
 It is written in Go, orchestrated by AWS Step Functions, and built to cost **$0**: it uses
 only features that are free outright or sit far inside AWS's always-free allowances.
 
-> **Status: Day 1 of 6 done.** The foundation, cost guardrails, demo workloads and CI are
-> built and deployed. The autopilot logic itself (observe → generate → shadow → PR → enforce
-> → watch → rollback) arrives on Days 2–6. See [PROGRESS.md](PROGRESS.md) for the live checklist.
+> **Status: Day 2 of 6 done.** The foundation, cost guardrails, demo workloads, CI and the
+> **observation engine** (`autopilot observe`) are built and verified against real AWS data.
+> Generation, shadow mode, the PR flow, enforcement, watching and rollback arrive on Days 3–6.
+> See [PROGRESS.md](PROGRESS.md) for the live checklist.
 
 ## How a rollout works
 
@@ -164,6 +165,40 @@ aws cloudtrail lookup-events \
   --max-results 5
 ```
 
+### Observe a role
+
+```bash
+go run ./cmd/autopilot observe --role iamap-demo-config-reader-role --days 7
+```
+
+It reads CloudTrail event history and IAM Access Advisor (read-only), writes the usage
+profile to `build/profiles/<role>.json` and prints a summary like this one from a real run
+(account ID shown as the fixture placeholder):
+
+```
+Observed actions (2), from CloudTrail event history:
+  dynamodb:DescribeTable  arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config  x25  read  ...
+  ssm:GetParameter        arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config   x25  read  ...
+
+Services accessed (4 of 6 granted), from IAM Access Advisor:
+  dynamodb  last 2026-09-29T18:18:08Z  tracked: dynamodb:DescribeTable
+  ...
+  not used in window: sns, sqs
+
+Warnings (2):
+  - excluded 2 platform call(s): kms:Decrypt by the Lambda runtime (environment variable decryption) ...
+```
+
+The app reads and writes a DynamoDB item on every run, but `GetItem`/`PutItem` never
+appear: that is the data-plane blind spot, and Access Advisor showing `dynamodb` as used
+is what lets Day 3 keep those actions safely.
+
+The observer refuses any role not tagged `autopilot:managed=true`, keeps only events whose
+session issuer is the role itself, paces `LookupEvents` at 1.5 requests/second with
+throttling retries, and drops calls AWS made with the role's credentials rather than the
+function's code ([ADR-002](DECISIONS.md#adr-002-exclude-platform-calls-from-observed-usage)).
+`--record <dir>` saves every raw API response as a redacted test fixture.
+
 ### Tear down
 
 ```bash
@@ -186,7 +221,7 @@ make destroy      # interactive terraform destroy
 ## Repository layout
 
 ```
-cmd/autopilot/            CLI: observe, generate, shadow, propose, report   (Days 2-4)
+cmd/autopilot/            CLI: observe (Day 2); generate, shadow, propose, report (Days 3-4)
 cmd/worker/               one Lambda binary; MODE=worker or MODE=approver  (Days 4-5)
 cmd/demo-*/               the three demo Lambdas                           (Day 1)
 internal/observe/         CloudTrail event history + Access Advisor -> usage profile
@@ -200,7 +235,7 @@ policies/demo/            the managed policy JSON that Terraform reads and PRs e
 statemachine/             Step Functions definition (rollout.asl.json)
 infra/terraform/          all AWS resources; local state, gitignored
 scripts/                  traffic.sh, cost-audit.sh
-testdata/                 recorded API responses, account ID redacted
+testdata/observe/         recorded API responses per demo role (redacted) + golden profiles
 autopilot.yaml            roles, keep-lists, data-plane actions, watch window
 CLAUDE.md                 hard zero-cost and safety rules
 PROGRESS.md               day-by-day checklist and findings
@@ -210,17 +245,22 @@ DECISIONS.md              architecture decision records
 ## Engineering notes
 
 - **Testing.** Code is unit-tested behind small interfaces with fakes and recorded fixtures;
-  tests never call AWS. The demo apps are covered today, and each autopilot package gets its
-  tests as it lands. Recorded fixtures replace the real account ID with `123456789012`.
+  tests never call AWS (`go test ./...` passes with credentials unset). The observer has a
+  golden-file test: real API responses recorded from the demo roles
+  (`testdata/observe/<role>/`, account ID redacted to `123456789012`) are replayed and the
+  profile must match `expected-profile.json` byte for byte (`-update` regenerates it).
 - **CI.** GitHub Actions runs lint, race tests and the arm64 build on Go 1.25, then
   `terraform fmt`, `init -backend=false` and `validate`, with pinned action SHAs and no
   AWS credentials.
 - **Findings from the first deploy** (details in [PROGRESS.md](PROGRESS.md)):
-  - The Lambda service itself makes calls under the function's role session (`kms:Decrypt`,
-    `logs:CreateLogStream`, with `invokedBy: lambda.amazonaws.com`). The observer must
-    filter these out, or the tightened policy would keep permissions the app never uses.
+  - The Lambda service itself makes calls under the function's role session (`kms:Decrypt`
+    with `invokedBy: lambda.amazonaws.com`). The observer filters these out, or the
+    tightened policy would keep permissions the app never uses.
   - Event names are not always IAM action names: Lambda's `ListFunctions` is recorded as
-    `ListFunctions20150331`, so the observer has to map event names to IAM actions.
+    `ListFunctions20150331`, so the observer maps event names to IAM actions.
+  - The Lambda runtime also calls AWS with the role's credentials at cold start
+    (`CreateLogStream`, env-var `kms:Decrypt`) *without* `invokedBy`; the observer
+    recognises those too.
 - **Decisions.** The reasoning behind each design choice is recorded in [DECISIONS.md](DECISIONS.md).
 
 ## License
