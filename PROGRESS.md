@@ -97,11 +97,24 @@ Read this and CLAUDE.md at the start of every session.
 - [x] ADR-005 (PR merge as approval; token in SSM SecureString, not Secrets Manager). The prompt calls
       it ADR-004, already used on Day 3.
 - [x] `make check` passes; pushed
-- [ ] CI green on GitHub for the Day 4 head (checked right after the push; tick in Day 5's first commit)
+- [x] CI green on GitHub for the Day 4 head (run 36968945611, both jobs passed)
 
-## Day 5
+## Day 5: The rollout runs in AWS (2026-10-02)
 
-- [ ] (Day 5 prompt)
+- [ ] Run `make traffic` first
+- [x] Proposal pipeline extracted to rollout.BuildPlan, shared by the CLI and the worker
+- [ ] internal/rollout: Enforce (5-version pruning, safety re-check), Watch (CloudTrail denials +
+      Lambda Errors via GetMetricStatistics), Rollback (+ PR comment, revert PR), Complete; tests
+- [ ] cmd/worker: MODE=worker steps and MODE=approver (approve only)
+- [ ] statemachine/rollout.asl.json (STANDARD, retries, catches, no logging); transitions counted
+- [ ] Terraform: worker/approver Lambdas + roles, state machine, GitHub OIDC provider + approver role;
+      plan reviewed, applied; `make cost-audit` passes
+- [ ] .github/workflows/approve-rollout.yml (OIDC, autopilot/ branches only); repo variable set by hand
+- [ ] `make rollout ROLE=...`, `make status` (`autopilot report --short`)
+- [ ] Real rollout of the inventory role: PR merged -> approved -> enforced -> watched -> Done;
+      default policy version changed; terraform plan clean
+- [ ] ADR-006 (policy versions), ADR-007 (OIDC approval), ADR-008 (two breakage signals). The prompt
+      calls them ADR-005..007, but ADR-005 was used on Day 4.
 
 ## Day 6
 

@@ -17,9 +17,8 @@ import (
 
 	"github.com/singha105/iam-autopilot/internal/catalog"
 	"github.com/singha105/iam-autopilot/internal/config"
-	"github.com/singha105/iam-autopilot/internal/generate"
 	"github.com/singha105/iam-autopilot/internal/githubpr"
-	"github.com/singha105/iam-autopilot/internal/observe"
+	"github.com/singha105/iam-autopilot/internal/rollout"
 	"github.com/singha105/iam-autopilot/internal/shadow"
 	"github.com/singha105/iam-autopilot/internal/store"
 )
@@ -140,61 +139,19 @@ func runPropose(ctx context.Context, args []string, stdout, stderr io.Writer) er
 		return fmt.Errorf("rollout %s for %s is still %s; finish or cancel it first", active[0].RolloutID, role, active[0].Status)
 	}
 
-	// 2. Resolve (refuses unmanaged roles), read the current policy, observe.
-	logger := slog.New(slog.NewTextHandler(stderr, nil))
-	target, err := observe.New(clients.CloudTrail, clients.IAM, logger).ResolveRole(ctx, role)
-	if err != nil {
-		return err
-	}
-	current, err := generate.CurrentPolicy(ctx, clients.PolicyIAM, role)
-	if err != nil {
-		return err
-	}
-	prof, err := loadProfile(ctx, profileFlags{role: role, days: days, region: region, configPath: configPath}, cfg, clients, stderr)
-	if err != nil {
-		return err
-	}
-
-	// 3. Generate, validate, shadow.
-	res, err := generate.Generate(current.Document, prof, cfg, cat)
-	if err != nil {
-		return err
-	}
-	findings, err := generate.Validate(ctx, clients.Analyzer, res.Policy)
-	if err != nil {
-		return err
-	}
-	res.Summary.AddValidation(findings)
-	validationErr := generate.CheckFindings(findings)
-	rep, err := shadow.New(clients.Simulator).ReplayWithSelfTest(ctx, res.Policy, current.Document, prof)
-	if err != nil {
-		return err
-	}
-	same, err := generate.SameAccess(current.Document, res.Policy, cat)
-	if err != nil {
-		return err
-	}
-
+	// 2. Resolve (refuses unmanaged roles), observe, generate, validate,
+	// shadow and decide: the same pipeline the worker Lambda runs.
 	at := now().UTC()
-	r := buildRollout(store.NewID(role, at), target, current, res, rep, prof, at)
-	body := githubpr.RenderPRBody(githubpr.BodyInput{
-		RolloutID: r.RolloutID, RoleName: role, PolicyArn: current.ARN, CurrentVersionID: current.VersionID,
-		Summary: res.Summary, Shadow: rep, WatchMinutes: cfg.Watch.Minutes, LagBufferMinutes: cfg.Watch.LagBufferMinutes,
-	})
-
-	switch {
-	case validationErr != nil:
-		r.Status = store.StatusFailed
-	case len(rep.Denied) > 0:
-		r.Status = store.StatusShadowFailed
-	case same:
-		r.Status = store.StatusNothingToDo
-	default:
-		r.Status = store.StatusPROpen
+	plan, err := rollout.BuildPlan(ctx, rollout.PlanClients{
+		CloudTrail: clients.CloudTrail, IAM: clients.IAM, PolicyIAM: clients.PolicyIAM,
+		Analyzer: clients.Analyzer, Simulator: clients.Simulator,
+		Log: slog.New(slog.NewTextHandler(stderr, nil)), Now: func() time.Time { return at },
+	}, cfg, cat, role, store.NewID(role, at), days)
+	if err != nil {
+		return err
 	}
-	if r.Status.Final() {
-		r.FinishedAt = store.Timestamp(at)
-	}
+	r, res, rep, body, validationErr := plan.Rollout, plan.Result, plan.Shadow, plan.Body, plan.ValidationErr
+	findings := plan.Findings
 
 	fmt.Fprintf(stdout, "Rollout %s: %s\n", r.RolloutID, r.Status)
 	fmt.Fprintf(stdout, "  %d -> %d actions granted (%.1f%% removed); shadow %d tested, %d denied; %d validation finding(s)\n",
@@ -250,29 +207,6 @@ func outcomeErr(s store.Status, validationErr error, rep shadow.Report) error {
 		return fmt.Errorf("%w: %d past call(s) would be denied", errShadowFailed, len(rep.Denied))
 	}
 	return nil
-}
-
-func buildRollout(id string, target observe.Role, current generate.ManagedPolicy, res generate.Result, rep shadow.Report, prof observe.Profile, at time.Time) store.Rollout {
-	summary, _ := json.Marshal(res.Summary)
-	report, _ := json.Marshal(rep)
-	actions := map[string]bool{}
-	for _, c := range prof.ObservedCalls {
-		actions[c.Action] = true
-	}
-	denied := []string{}
-	for _, d := range rep.Denied {
-		denied = append(denied, d.Action)
-	}
-	return store.Rollout{
-		RolloutID: id, RoleName: target.Name, RoleArn: target.ARN, FunctionName: target.FunctionName,
-		PolicyArn: current.ARN, CurrentVersionID: current.VersionID,
-		ProposedPolicy: string(res.PolicyJSON), Summary: string(summary), ShadowReport: string(report),
-		CreatedAt: store.Timestamp(at),
-		Metrics: store.Metrics{
-			GrantedBefore: res.Summary.GrantedBefore, GrantedAfter: res.Summary.GrantedAfter, RemovedPercent: res.Summary.RemovedPercent,
-			ObservedActions: len(actions), ShadowTested: rep.Tested, ShadowDenied: len(rep.Denied), DeniedActions: denied,
-		},
-	}
 }
 
 func runCancel(ctx context.Context, args []string, stdout, stderr io.Writer) error {
