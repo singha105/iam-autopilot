@@ -25,7 +25,8 @@ const (
 	cliPolicy = "arn:aws:iam::123456789012:policy/iamap/managed/iamap-demo-quarterly-policy"
 )
 
-type stubPolicyIAM struct{}
+// stubPolicyIAM serves one managed policy; doc defaults to ssm:* + sns:*.
+type stubPolicyIAM struct{ doc string }
 
 func (stubPolicyIAM) ListAttachedRolePolicies(context.Context, *iam.ListAttachedRolePoliciesInput, ...func(*iam.Options)) (*iam.ListAttachedRolePoliciesOutput, error) {
 	return &iam.ListAttachedRolePoliciesOutput{AttachedPolicies: []iamtypes.AttachedPolicy{
@@ -38,8 +39,11 @@ func (stubPolicyIAM) GetPolicy(context.Context, *iam.GetPolicyInput, ...func(*ia
 	return &iam.GetPolicyOutput{Policy: &iamtypes.Policy{PolicyName: aws.String("iamap-demo-quarterly-policy"), Path: aws.String("/iamap/managed/"), DefaultVersionId: aws.String("v1")}}, nil
 }
 
-func (stubPolicyIAM) GetPolicyVersion(context.Context, *iam.GetPolicyVersionInput, ...func(*iam.Options)) (*iam.GetPolicyVersionOutput, error) {
-	doc := `{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["ssm:*","sns:*"],"Resource":"*"}]}`
+func (s stubPolicyIAM) GetPolicyVersion(context.Context, *iam.GetPolicyVersionInput, ...func(*iam.Options)) (*iam.GetPolicyVersionOutput, error) {
+	doc := s.doc
+	if doc == "" {
+		doc = `{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["ssm:*","sns:*"],"Resource":"*"}]}`
+	}
 	return &iam.GetPolicyVersionOutput{PolicyVersion: &iamtypes.PolicyVersion{Document: aws.String(url.QueryEscape(doc))}}, nil
 }
 

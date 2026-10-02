@@ -1,5 +1,5 @@
-// Command autopilot is the local CLI: observe, generate and shadow today;
-// propose and report as later stages land. See ADR-001 for why it uses package flag.
+// Command autopilot is the local CLI: observe, generate, shadow, propose,
+// cancel and status. See ADR-001 for why it uses package flag.
 package main
 
 import (
@@ -24,6 +24,10 @@ Commands:
              with Access Analyzer ValidatePolicy, write out/<role>/ (read-only)
   shadow     Replay past calls through the IAM policy simulator against a
              proposed policy; exit 1 if any would be denied (read-only)
+  propose    observe -> generate -> validate -> shadow -> record -> open a PR
+             (--dry-run prints the PR body and writes nothing)
+  cancel     Close a rollout's PR without merging and mark it CANCELLED
+  status     List rollouts, or show one (--rollout <id>)
 
 Run "autopilot <command> -h" for a command's flags.
 `
@@ -49,6 +53,12 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		err = runGenerate(ctx, args[1:], stdout, stderr)
 	case "shadow":
 		err = runShadow(ctx, args[1:], stdout, stderr)
+	case "propose":
+		err = runPropose(ctx, args[1:], stdout, stderr)
+	case "cancel":
+		err = runCancel(ctx, args[1:], stdout, stderr)
+	case "status":
+		err = runStatus(ctx, args[1:], stdout, stderr)
 	case "help", "-h", "-help", "--help":
 		fmt.Fprint(stdout, usage)
 		return 0

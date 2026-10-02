@@ -17,12 +17,15 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/accessanalyzer"
 	"github.com/aws/aws-sdk-go-v2/service/cloudtrail"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
 	"github.com/singha105/iam-autopilot/internal/generate"
 	"github.com/singha105/iam-autopilot/internal/observe"
 	"github.com/singha105/iam-autopilot/internal/shadow"
+	"github.com/singha105/iam-autopilot/internal/store"
 )
 
 type observeOptions struct {
@@ -77,7 +80,10 @@ type awsClients struct {
 	PolicyIAM  generate.IAMAPI
 	Simulator  shadow.SimulatorAPI
 	Analyzer   generate.AccessAnalyzerAPI
-	AccountID  func(context.Context) (string, error)
+	SSM        ssmAPI
+	// Rollouts returns the rollout store for a table name.
+	Rollouts  func(table string) rolloutStore
+	AccountID func(context.Context) (string, error)
 }
 
 // loadClients builds real clients from the default credential chain (so a
@@ -97,6 +103,10 @@ var loadClients = func(ctx context.Context, region string) (awsClients, error) {
 		PolicyIAM:  iamClient,
 		Simulator:  iamClient,
 		Analyzer:   accessanalyzer.NewFromConfig(cfg),
+		SSM:        ssm.NewFromConfig(cfg),
+		Rollouts: func(table string) rolloutStore {
+			return store.New(dynamodb.NewFromConfig(cfg), table)
+		},
 		AccountID: func(ctx context.Context) (string, error) {
 			out, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 			if err != nil {
