@@ -1,12 +1,22 @@
-# Configuration read by the autopilot (Day 2 onwards).
+# Configuration read by the autopilot: from this file by the CLI, and from
+# main on GitHub by the rollout Lambda (Day 5).
+
+# Repository holding this file and the policy files that PRs edit.
+github:
+  owner: singha105
+  repo: iam-autopilot
+  branch: main
 
 # Roles the autopilot may tighten. Each must be tagged autopilot:managed=true and
-# carry exactly one customer-managed policy under /iamap/managed/.
+# carry exactly one customer-managed policy under /iamap/managed/. policyFile is
+# the JSON file Terraform deploys that policy from, and that a proposal PR edits.
 roles:
   - name: iamap-demo-inventory-role
+    policyFile: policies/demo/inventory.json
     observationDays: 1 # short for the demo; 90 in real life
     keepActions: []
   - name: iamap-demo-config-reader-role
+    policyFile: policies/demo/config-reader.json
     observationDays: 1
     keepActions: []
     # The owner knows the app only reads and writes one item; without this the
@@ -14,6 +24,7 @@ roles:
     dataPlaneActions:
       dynamodb: [GetItem, PutItem]
   - name: iamap-demo-quarterly-role
+    policyFile: policies/demo/quarterly.json
     observationDays: 1
     keepActions: []
 

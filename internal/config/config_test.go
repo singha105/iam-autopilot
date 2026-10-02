@@ -1,10 +1,14 @@
 package config
 
 import (
+	"context"
+	"errors"
 	"reflect"
 	"strings"
 	"testing"
 )
+
+const watchOK = "watch: {minutes: 30, lagBufferMinutes: 15, pollSeconds: 300}\n"
 
 func TestLoadRepoConfig(t *testing.T) {
 	c, err := Load("../../autopilot.yaml")
@@ -28,7 +32,7 @@ func TestLoadRepoConfig(t *testing.T) {
 }
 
 func TestKeepEntryForms(t *testing.T) {
-	c, err := Parse([]byte(`
+	c, err := Parse([]byte(watchOK + `
 roles:
   - name: r
     observationDays: 7
@@ -52,12 +56,18 @@ neverRemove: [sts:GetCallerIdentity]
 }
 
 func TestParseRejects(t *testing.T) {
+	// Each case has a valid watch block, so it fails for its own reason.
 	for name, doc := range map[string]string{
-		"unknown field (typo)": "roles:\n  - name: r\n    keepActons: [ssm:GetParameter]\n",
-		"duplicate role":       "roles:\n  - name: r\n  - name: r\n",
-		"bad action name":      "neverRemove: [GetParameter]\n",
-		"observation too long": "roles:\n  - name: r\n    observationDays: 120\n",
-		"role without name":    "roles:\n  - observationDays: 1\n",
+		"unknown field (typo)":        watchOK + "roles:\n  - name: r\n    keepActons: [ssm:GetParameter]\n",
+		"duplicate role":              watchOK + "roles:\n  - name: r\n  - name: r\n",
+		"bad action name":             watchOK + "neverRemove: [GetParameter]\n",
+		"observation too long":        watchOK + "roles:\n  - name: r\n    observationDays: 120\n",
+		"role without name":           watchOK + "roles:\n  - observationDays: 1\n",
+		"policyFile outside policies": watchOK + "roles:\n  - name: r\n    policyFile: ../secrets.json\n",
+		"policyFile not json":         watchOK + "roles:\n  - name: r\n    policyFile: policies/demo/x.yaml\n",
+		"missing watch":               "roles:\n  - name: r\n",
+		"watch minutes zero":          "watch: {minutes: 0, lagBufferMinutes: 15, pollSeconds: 300}\nroles:\n  - name: r\n",
+		"watch poll negative":         "watch: {minutes: 30, lagBufferMinutes: 15, pollSeconds: -1}\nroles:\n  - name: r\n",
 	} {
 		if _, err := Parse([]byte(doc)); err == nil {
 			t.Errorf("%s: Parse succeeded, want error", name)
@@ -67,8 +77,53 @@ func TestParseRejects(t *testing.T) {
 	}
 }
 
+func TestDefaultsAndRoleLookup(t *testing.T) {
+	c, err := Parse([]byte(watchOK + "roles:\n  - name: r\n    policyFile: policies/demo/r.json\n"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.GitHub != (GitHub{Owner: "singha105", Repo: "iam-autopilot", Branch: "main"}) {
+		t.Errorf("github defaults = %+v", c.GitHub)
+	}
+	if r, err := c.RoleOrError("r"); err != nil || r.PolicyFile != "policies/demo/r.json" {
+		t.Errorf("RoleOrError(r) = %+v, %v", r, err)
+	}
+	if _, err := c.RoleOrError("someone-else"); err == nil || !strings.Contains(err.Error(), "not listed in autopilot.yaml") {
+		t.Errorf("unknown role: err = %v", err)
+	}
+}
+
+type fakeFetcher struct {
+	files map[string]string
+	got   []string
+}
+
+func (f *fakeFetcher) FetchFile(_ context.Context, path, ref string) ([]byte, error) {
+	f.got = append(f.got, path+"@"+ref)
+	b, ok := f.files[path]
+	if !ok {
+		return nil, errors.New("404 Not Found")
+	}
+	return []byte(b), nil
+}
+
+func TestLoadFromGitHubUsesTheSameValidation(t *testing.T) {
+	f := &fakeFetcher{files: map[string]string{"autopilot.yaml": watchOK + "roles:\n  - name: r\n"}}
+	c, err := LoadFrom(context.Background(), f, "autopilot.yaml", "main")
+	if err != nil || len(c.Roles) != 1 || !reflect.DeepEqual(f.got, []string{"autopilot.yaml@main"}) {
+		t.Fatalf("LoadFrom = %+v, %v (fetched %v)", c, err, f.got)
+	}
+	f.files["autopilot.yaml"] = "roles:\n  - name: r\n" // no watch block
+	if _, err := LoadFrom(context.Background(), f, "autopilot.yaml", "main"); err == nil {
+		t.Error("LoadFrom must validate like Load")
+	}
+	if _, err := LoadFrom(context.Background(), f, "missing.yaml", "main"); err == nil || !strings.Contains(err.Error(), "missing.yaml@main") {
+		t.Errorf("fetch error: %v", err)
+	}
+}
+
 func TestDataPlaneFor(t *testing.T) {
-	c, err := Parse([]byte(`
+	c, err := Parse([]byte(watchOK + `
 roles:
   - name: narrow
     dataPlaneActions:

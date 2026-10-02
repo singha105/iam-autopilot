@@ -71,7 +71,7 @@ func setup(t *testing.T, analyzer stubAnalyzer, sim stubSimulator) (dir, profile
 	t.Helper()
 	dir = t.TempDir()
 	configPath = filepath.Join(dir, "autopilot.yaml")
-	if err := os.WriteFile(configPath, []byte("roles:\n  - name: "+cliRole+"\n    observationDays: 1\n"), 0o644); err != nil {
+	if err := os.WriteFile(configPath, []byte("watch: {minutes: 30, lagBufferMinutes: 15, pollSeconds: 300}\nroles:\n  - name: "+cliRole+"\n    policyFile: policies/demo/quarterly.json\n    observationDays: 1\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	at := time.Date(2026, 10, 1, 11, 0, 0, 0, time.UTC)
