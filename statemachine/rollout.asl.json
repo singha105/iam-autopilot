@@ -1,0 +1,399 @@
+{
+  "Comment": "IAM Least-Privilege Autopilot: one rollout tightens one role's policy. Input: {\"roleName\": \"...\"}. STANDARD workflow, no CloudWatch logging (keeps it at $0).",
+  "StartAt": "Start",
+  "States": {
+    "Start": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "start",
+          "roleName.$": "$.roleName"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "ObserveGenerateShadow"
+    },
+    "ObserveGenerateShadow": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "observe_generate_shadow",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "Decide"
+    },
+    "Decide": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.shadowDenied",
+          "NumericGreaterThan": 0,
+          "Next": "ShadowFailed"
+        },
+        {
+          "Variable": "$.nothingToDo",
+          "BooleanEquals": true,
+          "Next": "NothingToDo"
+        }
+      ],
+      "Default": "Propose"
+    },
+    "Propose": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "propose",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "AwaitApproval"
+    },
+    "AwaitApproval": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "await",
+          "state.$": "$",
+          "taskToken.$": "$$.Task.Token"
+        }
+      },
+      "ResultPath": null,
+      "TimeoutSeconds": 604800,
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.Timeout",
+            "PRClosed"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Cancel"
+        },
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "Enforce"
+    },
+    "Enforce": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "enforce",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "WaitBeforeWatch"
+    },
+    "WaitBeforeWatch": {
+      "Type": "Wait",
+      "SecondsPath": "$.pollSeconds",
+      "Next": "Watch"
+    },
+    "Watch": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "watch",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Rollback"
+        }
+      ],
+      "Next": "CheckWatch"
+    },
+    "CheckWatch": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.broken",
+          "BooleanEquals": true,
+          "Next": "Rollback"
+        },
+        {
+          "Variable": "$.done",
+          "BooleanEquals": true,
+          "Next": "Complete"
+        }
+      ],
+      "Default": "WaitBeforeWatch"
+    },
+    "Rollback": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "rollback",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "RolledBack"
+    },
+    "RolledBack": {
+      "Type": "Fail",
+      "Error": "RolledBack",
+      "Cause": "The tightened policy broke the role; the previous version was restored and a revert PR opened."
+    },
+    "Complete": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "complete",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "Done"
+    },
+    "Done": {
+      "Type": "Succeed"
+    },
+    "Cancel": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "cancel",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "MarkFailed"
+        }
+      ],
+      "Next": "Cancelled"
+    },
+    "Cancelled": {
+      "Type": "Succeed"
+    },
+    "MarkFailed": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${worker_arn}",
+        "Payload": {
+          "step": "mark_failed",
+          "state.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.TooManyRequestsException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Failed"
+    },
+    "Failed": {
+      "Type": "Fail",
+      "Error": "RolloutFailed",
+      "Cause": "See the rollout record and the PR for details."
+    },
+    "ShadowFailed": {
+      "Type": "Fail",
+      "Error": "ShadowFailed",
+      "Cause": "A past call would be denied by the proposal; nothing was changed."
+    },
+    "NothingToDo": {
+      "Type": "Succeed"
+    }
+  }
+}
