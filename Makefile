@@ -9,7 +9,7 @@ BUILD_DIR  := build
 CMDS       := $(notdir $(wildcard cmd/*))
 GOFLAGS_LAMBDA := -trimpath -tags lambda.norpc -ldflags "-s -w"
 
-.PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help
+.PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help catalog
 
 all: check
 
@@ -25,9 +25,11 @@ help:
 	@echo "traffic      invoke each demo Lambda 5 times"
 	@echo "cost-audit   fail if any forbidden resource type exists"
 	@echo "destroy      terraform destroy (interactive)"
+	@echo "catalog      re-download the IAM action catalog into internal/catalog/data/actions.json"
 
 build: $(addprefix $(BUILD_DIR)/,$(addsuffix /bootstrap,$(CMDS)))
 
+# The Lambda binaries live under cmd/; internal/catalog/gen is a dev tool, not deployed.
 # Always rebuild: Go's own cache makes this cheap and avoids stale binaries.
 $(BUILD_DIR)/%/bootstrap: FORCE
 	@mkdir -p $(dir $@)
@@ -69,6 +71,9 @@ cost-audit:
 
 destroy:
 	terraform -chdir=$(TF_DIR) destroy
+
+catalog:
+	go run ./internal/catalog/gen -out internal/catalog/data/actions.json
 
 clean:
 	rm -rf $(BUILD_DIR) $(TF_DIR)/tfplan

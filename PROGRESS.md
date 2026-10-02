@@ -38,12 +38,24 @@ Read this and CLAUDE.md at the start of every session.
 - [x] `autopilot observe` matches the expected actions for all three demo roles (live, 2026-10-01)
 - [x] Tests pass with AWS credentials unset; real account ID absent from the repo (0 matches)
 - [x] `make check` passes; pushed
-- [ ] CI green on GitHub for the Day 2 head (checked right after the push; tick in Day 3's first commit)
+- [x] CI green on GitHub for the Day 2 head (run 36797344547, both jobs passed)
 
-## Day 3
+## Day 3: Policy generator and shadow mode (2026-10-01)
 
 - [ ] Run `make traffic` first
-- [ ] (Day 3 prompt)
+- [x] Service Authorization Reference endpoint confirmed (index: JSON array of 455 {service, url, modified})
+- [x] `make catalog` writes internal/catalog/data/actions.json (12 services, 1994 actions,
+      resource types with ARN formats); deterministic on re-run
+- [ ] internal/catalog API: Expand, Matches, SupportsResources, Exists, CountGranted (NotAction -> error)
+- [ ] CurrentPolicy: the one /iamap/managed/ policy, default version, URL-decoded
+- [ ] internal/generate: rules R1-R7, statement grouping, 6,144-char limit, Summary
+- [ ] Validate with Access Analyzer ValidatePolicy (ERROR / SECURITY_WARNING fail the run)
+- [ ] internal/shadow: SimulateCustomPolicy replay at 5 req/s, plus self-test of the current policy
+- [ ] CLI: `autopilot generate` (proposed-policy.json, summary.json, summary.md) and `autopilot shadow`
+- [ ] Tests: R1-R7 table tests, golden proposals per demo role, determinism, shadow denial, validation
+- [ ] Real run for all three roles: 0 would-be denials, validation clean
+- [ ] ADR-003 (blind-spot rule R4) and ADR-004 (simulator, not paid custom checks). The prompt
+      calls them ADR-002/003, but ADR-002 was already used on Day 2 for platform calls.
 
 ## Day 4
 

@@ -1,5 +1,8 @@
 # Build output
 build/
+
+# Generated proposals (autopilot generate --out-dir)
+out/
 *.zip
 
 # Terraform: state is local and never committed
