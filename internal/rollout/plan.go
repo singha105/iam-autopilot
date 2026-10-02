@@ -1,3 +1,6 @@
+// Package rollout runs a rollout: BuildPlan (observe, generate, validate,
+// shadow, decide), then Enforce, Watch, Rollback, Complete, Cancel and
+// MarkFailed on the Step Functions path, and Approve for the PR merge.
 package rollout
 
 import (
