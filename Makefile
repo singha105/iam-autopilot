@@ -7,7 +7,9 @@ SHELL      := /bin/bash
 TF_DIR     := infra/terraform
 BUILD_DIR  := build
 CMDS       := $(notdir $(wildcard cmd/*))
-GOFLAGS_LAMBDA := -trimpath -tags lambda.norpc -ldflags "-s -w"
+# -buildvcs=false: no git revision in the binary, so an unrelated commit does not
+# change the zip hash and make Terraform redeploy every function.
+GOFLAGS_LAMBDA := -trimpath -buildvcs=false -tags lambda.norpc -ldflags "-s -w"
 
 .PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help catalog
 

@@ -65,12 +65,24 @@ Read this and CLAUDE.md at the start of every session.
 - [x] ADR-003 (evidence-based R4) and ADR-004 (simulator, not paid custom checks). The prompt
       called them ADR-002/003, but ADR-002 was already used on Day 2 for platform calls.
 - [x] `make check` passes; pushed
-- [ ] CI green on GitHub for the Day 3 head (checked right after the push; tick in Day 4's first commit)
+- [x] CI green on GitHub for the Day 3 head (run 36960690282, both jobs passed)
 
-## Day 4
+## Day 4: Rollout records and the pull request (2026-10-02)
 
-- [ ] Run `make traffic` first
-- [ ] (Day 4 prompt)
+- [x] Run `make traffic` first (15/15 OK at 2026-10-02T04:34Z, and again after the apply)
+- [ ] GitHub token stored by hand as SSM SecureString /iamap/github/token (Standard, aws/ssm key)
+- [x] Terraform: iamap-rollouts table (PROVISIONED 1/1, hash key rolloutId); plan reviewed, applied;
+      `make cost-audit` passes; follow-up plan shows no changes
+- [x] Reproducible Lambda builds (-buildvcs=false): the git revision in each binary made every commit
+      redeploy all three demos; one-time redeploy of identical code done with the table apply
+- [ ] internal/store: rollout record, conditional status updates, ActiveForRole, 300 KB guard
+- [ ] Config from a local file or from GitHub; policyFile per role; watch values > 0
+- [ ] internal/githubpr: OpenPolicyPR, CommentOnPR, OpenRevertPR, IsMerged, label, httptest tests
+- [ ] `autopilot propose` (with --dry-run) and `autopilot cancel`
+- [ ] Real run: inventory dry-run body, one real PR opened then cancelled (record CANCELLED),
+      dry-run bodies for config-reader and quarterly
+- [ ] ADR-005 (PR merge as approval; token in SSM SecureString, not Secrets Manager). The prompt calls
+      it ADR-004, already used on Day 3.
 
 ## Day 5
 

@@ -25,3 +25,13 @@ output "demo_table_name" {
 output "budget_name" {
   value = one(aws_budgets_budget.zero_spend[*].name)
 }
+
+output "rollouts_table_name" {
+  description = "DynamoDB table holding one record per rollout."
+  value       = aws_dynamodb_table.rollouts.name
+}
+
+output "github_token_parameter" {
+  description = "SSM SecureString parameter (created by hand, not by Terraform) holding the GitHub token."
+  value       = local.github_token_parameter
+}
