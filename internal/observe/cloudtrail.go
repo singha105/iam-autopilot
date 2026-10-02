@@ -29,6 +29,7 @@ type EventsResult struct {
 	Window   Window
 	Calls    []ObservedCall
 	Denied   []DeniedCall
+	Excluded []ExcludedCall
 	Warnings []string
 	Stats    Stats
 }
@@ -59,7 +60,8 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 	type key struct{ action, resource string }
 	calls := map[key]*ObservedCall{}
 	otherIssuers := 0
-	platformCalls := map[string]int{}
+	type excludedKey struct{ action, caller string }
+	platformCalls := map[excludedKey]int{}
 
 	in := &cloudtrail.LookupEventsInput{
 		LookupAttributes: []cttypes.LookupAttribute{{
@@ -90,7 +92,7 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 			}
 			action, actionWarning := ActionFor(ev.EventSource, ev.EventName)
 			if by := platformCaller(ev); by != "" {
-				platformCalls[action+" by "+by]++
+				platformCalls[excludedKey{action, by}]++
 				continue
 			}
 			if actionWarning != "" {
@@ -142,9 +144,11 @@ func (o *Observer) Collect(ctx context.Context, role Role, start, end time.Time)
 	if otherIssuers > 0 {
 		warn.add(fmt.Sprintf("ignored %d event(s) with username %s but a different session issuer than %s", otherIssuers, role.FunctionName, role.ARN))
 	}
-	for what, n := range platformCalls {
-		warn.add(fmt.Sprintf("excluded %d platform call(s): %s (made by AWS with the role's credentials, not by the function's code)", n, what))
+	for k, n := range platformCalls {
+		res.Excluded = append(res.Excluded, ExcludedCall{Action: k.action, Caller: k.caller, Count: n})
+		warn.add(fmt.Sprintf("excluded %d platform call(s): %s by %s (made by AWS with the role's credentials, not by the function's code)", n, k.action, k.caller))
 	}
+	sortExcluded(res.Excluded)
 
 	res.Calls = make([]ObservedCall, 0, len(calls))
 	for _, c := range calls {
@@ -263,6 +267,15 @@ func sortDenied(ds []DeniedCall) {
 			return a.Resource < b.Resource
 		}
 		return a.ErrorCode < b.ErrorCode
+	})
+}
+
+func sortExcluded(es []ExcludedCall) {
+	sort.Slice(es, func(i, j int) bool {
+		if es[i].Action != es[j].Action {
+			return es[i].Action < es[j].Action
+		}
+		return es[i].Caller < es[j].Caller
 	})
 }
 

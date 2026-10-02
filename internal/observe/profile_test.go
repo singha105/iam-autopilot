@@ -126,7 +126,7 @@ func TestEmptyProfileEncodesEmptyLists(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, field := range []string{`"observedCalls": []`, `"servicesAccessed": []`, `"deniedCalls": []`, `"warnings": []`} {
+	for _, field := range []string{`"observedCalls": []`, `"servicesAccessed": []`, `"deniedCalls": []`, `"excludedCalls": []`, `"warnings": []`} {
 		if !bytes.Contains(b, []byte(field)) {
 			t.Errorf("encoded profile lacks %s:\n%s", field, b)
 		}

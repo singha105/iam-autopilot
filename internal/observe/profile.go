@@ -64,12 +64,30 @@ func assemble(role Role, events EventsResult, services []ServiceAccess) Profile 
 		ObservedCalls:    append([]ObservedCall{}, events.Calls...),
 		ServicesAccessed: out,
 		DeniedCalls:      append([]DeniedCall{}, events.Denied...),
+		ExcludedCalls:    append([]ExcludedCall{}, events.Excluded...),
 		Warnings:         warn.sorted(),
 		Stats:            events.Stats,
 	}
 	sortCalls(p.ObservedCalls)
 	sortDenied(p.DeniedCalls)
+	sortExcluded(p.ExcludedCalls)
 	return p
+}
+
+// ExcludedActions returns the set of actions seen only as platform calls
+// (ADR-002), i.e. excluded and never observed from the function's code.
+func (p Profile) ExcludedActions() map[string]bool {
+	observed := map[string]bool{}
+	for _, c := range p.ObservedCalls {
+		observed[c.Action] = true
+	}
+	out := map[string]bool{}
+	for _, e := range p.ExcludedCalls {
+		if !observed[e.Action] {
+			out[e.Action] = true
+		}
+	}
+	return out
 }
 
 // AccessedServices returns the namespaces with a lastAuthenticated inside the window.

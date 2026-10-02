@@ -60,6 +60,15 @@ type DeniedCall struct {
 	Time      time.Time `json:"time"`
 }
 
+// ExcludedCall counts calls made with the role's credentials by AWS rather
+// than by the function's code (ADR-002). They are not usage, but the generator
+// needs them to tell when Access Advisor activity is only the platform's.
+type ExcludedCall struct {
+	Action string `json:"action"`
+	Caller string `json:"caller"`
+	Count  int    `json:"count"`
+}
+
 // ServiceAccess is one service namespace from IAM Access Advisor.
 // LastAuthenticated is nil when the service was not used inside the window.
 type ServiceAccess struct {
@@ -90,6 +99,7 @@ type Profile struct {
 	ObservedCalls    []ObservedCall  `json:"observedCalls"`
 	ServicesAccessed []ServiceAccess `json:"servicesAccessed"`
 	DeniedCalls      []DeniedCall    `json:"deniedCalls"`
+	ExcludedCalls    []ExcludedCall  `json:"excludedCalls"`
 	Warnings         []string        `json:"warnings"`
 	Stats            Stats           `json:"stats"`
 }

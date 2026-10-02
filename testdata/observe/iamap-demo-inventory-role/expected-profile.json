@@ -111,6 +111,18 @@
     }
   ],
   "deniedCalls": [],
+  "excludedCalls": [
+    {
+      "action": "kms:Decrypt",
+      "caller": "lambda.amazonaws.com",
+      "count": 40
+    },
+    {
+      "action": "logs:CreateLogStream",
+      "caller": "the Lambda runtime (awslambda-worker)",
+      "count": 1
+    }
+  ],
   "warnings": [
     "excluded 1 platform call(s): logs:CreateLogStream by the Lambda runtime (awslambda-worker) (made by AWS with the role's credentials, not by the function's code)",
     "excluded 40 platform call(s): kms:Decrypt by lambda.amazonaws.com (made by AWS with the role's credentials, not by the function's code)"

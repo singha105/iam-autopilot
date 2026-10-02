@@ -134,6 +134,14 @@ func TestCollectExcludesPlatformCalls(t *testing.T) {
 	if want := []string{"iam:ListRoles", "kms:Decrypt"}; !reflect.DeepEqual(got, want) {
 		t.Errorf("actions = %v, want %v", got, want)
 	}
+	wantExcluded := []ExcludedCall{
+		{Action: "kms:Decrypt", Caller: "lambda.amazonaws.com", Count: 2},
+		{Action: "kms:Decrypt", Caller: "the Lambda runtime (environment variable decryption)", Count: 1},
+		{Action: "logs:CreateLogStream", Caller: "the Lambda runtime (awslambda-worker)", Count: 1},
+	}
+	if !reflect.DeepEqual(res.Excluded, wantExcluded) {
+		t.Errorf("excluded = %+v, want %+v", res.Excluded, wantExcluded)
+	}
 	for _, want := range []string{
 		"excluded 2 platform call(s): kms:Decrypt by lambda.amazonaws.com",
 		"excluded 1 platform call(s): logs:CreateLogStream by the Lambda runtime (awslambda-worker)",
