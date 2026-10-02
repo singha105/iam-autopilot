@@ -70,19 +70,34 @@ Read this and CLAUDE.md at the start of every session.
 ## Day 4: Rollout records and the pull request (2026-10-02)
 
 - [x] Run `make traffic` first (15/15 OK at 2026-10-02T04:34Z, and again after the apply)
-- [ ] GitHub token stored by hand as SSM SecureString /iamap/github/token (Standard, aws/ssm key)
+- [x] GitHub token stored by hand as SSM SecureString /iamap/github/token (Standard, aws/ssm key,
+      now version 2). Fine-grained, singha105/iam-autopilot only, Contents + Pull requests + Issues
+      read/write
 - [x] Terraform: iamap-rollouts table (PROVISIONED 1/1, hash key rolloutId); plan reviewed, applied;
       `make cost-audit` passes; follow-up plan shows no changes
 - [x] Reproducible Lambda builds (-buildvcs=false): the git revision in each binary made every commit
       redeploy all three demos; one-time redeploy of identical code done with the table apply
-- [ ] internal/store: rollout record, conditional status updates, ActiveForRole, 300 KB guard
-- [ ] Config from a local file or from GitHub; policyFile per role; watch values > 0
-- [ ] internal/githubpr: OpenPolicyPR, CommentOnPR, OpenRevertPR, IsMerged, label, httptest tests
-- [ ] `autopilot propose` (with --dry-run) and `autopilot cancel`
-- [ ] Real run: inventory dry-run body, one real PR opened then cancelled (record CANCELLED),
-      dry-run bodies for config-reader and quarterly
-- [ ] ADR-005 (PR merge as approval; token in SSM SecureString, not Secrets Manager). The prompt calls
+- [x] internal/store: rollout record, conditional status updates (lost-race test), ActiveForRole,
+      300 KB guard
+- [x] Config from a local file or from GitHub (LoadFrom + FetchFile); github block; policyFile per
+      role; watch values > 0; AddKeepActions edits one line
+- [x] internal/githubpr (go-github v90, newest major supporting Go 1.25): OpenPolicyPR, CommentOnPR,
+      OpenRevertPR, ClosePR, IsMerged, label; tested against an httptest fake GitHub
+- [x] `autopilot propose` (with --dry-run), `autopilot cancel`, `autopilot status`
+- [x] Real run (2026-10-02):
+      - inventory dry run: 1273 -> 5 (99.6%), shadow 5/5, 0 findings
+      - first two real attempts FAILED cleanly: 401 (invalid token), then 403 (token lacked Contents
+        write); records moved to FAILED, nothing created on GitHub
+      - PR https://github.com/singha105/iam-autopilot/pull/1 opened (label, one commit, one file),
+        then cancelled: closed unmerged with a comment, branch deleted, record CANCELLED
+      - config-reader dry run 305 -> 4 (98.7%), quarterly 532 -> 1 (99.8%), both shadow 0 denied
+- [x] Shadow test-set fix (approved): once Access Advisor caught up, tracked actions were also tested
+      on "*", so correctly scoped ssm:GetParameter / dynamodb:DescribeTable looked denied. Observed
+      actions are now tested only on their observed resources; regression test added
+- [x] ADR-005 (PR merge as approval; token in SSM SecureString, not Secrets Manager). The prompt calls
       it ADR-004, already used on Day 3.
+- [x] `make check` passes; pushed
+- [ ] CI green on GitHub for the Day 4 head (checked right after the push; tick in Day 5's first commit)
 
 ## Day 5
 
@@ -103,6 +118,16 @@ Read this and CLAUDE.md at the start of every session.
   because newer releases require Go 1.26. Check `go.mod` after every `go get`.
 
 ## Findings for later days
+
+- **Day 5 approver:** `autopilot status` shows the rollout; the PR body ends with
+  `<!-- rolloutId: ... -->` and the record holds prNumber/prBranch, so the approve workflow can map a
+  merged PR back to its rollout. Records start at PR_OPEN; the approver must move PR_OPEN -> APPROVED
+  with UpdateStatus (conditional) before applying anything.
+- **The rollouts table holds 3 inventory records from Day 4:** two FAILED (token problems) and one
+  CANCELLED (PR #1). ActiveForRole ignores them, so new proposals are allowed.
+- **Token hygiene:** the first token was pasted into chat and typed on the command line. It was
+  replaced (parameter version 2); the old one should be revoked on GitHub and the
+  `put-parameter --value` line removed from ~/.zsh_history.
 
 - **R4 as briefed over-kept (Day 3, decided with the user).** Keeping every configured data-plane action
   for any service Access Advisor marks as used kept s3 Get/Put/DeleteObject and lambda:InvokeFunction
@@ -147,4 +172,4 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Next
 
-- Day 4: run `aws login --profile paved` and `make traffic`, then paste the Day 4 prompt.
+- Day 5: run `aws login --profile paved` and `make traffic`, then paste the Day 5 prompt.

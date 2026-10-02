@@ -206,3 +206,28 @@ func TestSelfTestFlagsABadTestSet(t *testing.T) {
 		t.Errorf("warnings = %v", rep.Warnings)
 	}
 }
+
+// Regression for the Day 4 dry runs: once Access Advisor caught up, it listed
+// ssm:GetParameter and dynamodb:DescribeTable as tracked actions. Testing them
+// on "*" made a correctly scoped proposal look like it would deny them.
+func TestTrackedActionsThatWereObservedAreNotTestedOnStar(t *testing.T) {
+	p := profile()
+	t0 := inside
+	p.ServicesAccessed = append(p.ServicesAccessed,
+		observe.ServiceAccess{Namespace: "ssm", LastAuthenticated: &t0, TrackedActions: []observe.TrackedAction{{Action: "ssm:GetParameter", LastAccessed: inside}}},
+		observe.ServiceAccess{Namespace: "dynamodb", LastAuthenticated: &t0, TrackedActions: []observe.TrackedAction{{Action: "dynamodb:DescribeTable", LastAccessed: inside}}},
+	)
+	calls, _ := TestSet(p)
+	for _, c := range calls {
+		if c.Resource == "*" && (c.Action == "ssm:GetParameter" || c.Action == "dynamodb:DescribeTable") {
+			t.Errorf("%s tested on * although it was observed on a concrete resource", c.Action)
+		}
+	}
+	rep, err := replayer(&fakeSimulator{}).Replay(context.Background(), proposal(t, goodProposal), p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rep.Denied) != 0 || rep.Tested != 4 {
+		t.Errorf("scoped proposal: tested %d, denied %+v", rep.Tested, rep.Denied)
+	}
+}

@@ -18,10 +18,11 @@ anything gets denied.
 It is written in Go, orchestrated by AWS Step Functions, and built to cost **$0**: it uses
 only features that are free outright or sit far inside AWS's always-free allowances.
 
-> **Status: Day 3 of 6 done.** The foundation, cost guardrails, demo workloads and CI, the
-> **observation engine** (`autopilot observe`), the **policy generator** (`autopilot generate`)
-> and **shadow mode** (`autopilot shadow`) are built and verified against real AWS data. The PR
-> flow, enforcement, watching and rollback arrive on Days 4–6.
+> **Status: Day 4 of 6 done.** Built and verified against real AWS data and a real GitHub PR:
+> the foundation and cost guardrails, the observation engine (`autopilot observe`), the policy
+> generator (`autopilot generate`), shadow mode (`autopilot shadow`), and the **proposal flow**
+> (`autopilot propose` records a rollout and opens the PR; `autopilot cancel` closes it).
+> Enforcement on merge, watching and automatic rollback arrive on Days 5–6.
 > See [PROGRESS.md](PROGRESS.md) for the live checklist.
 
 ## How a rollout works
@@ -228,6 +229,34 @@ marked kept-unobservable ([ADR-003](DECISIONS.md#adr-003-keep-data-plane-actions
 **R7** never grant more than the current policy. Why the simulator rather than Access Analyzer's
 paid custom checks: [ADR-004](DECISIONS.md#adr-004-iam-policy-simulator-for-shadow-mode-not-access-analyzer-custom-checks).
 
+### Propose a change as a pull request
+
+```bash
+go run ./cmd/autopilot propose --role iamap-demo-inventory-role --dry-run   # prints the PR, writes nothing
+go run ./cmd/autopilot propose --role iamap-demo-inventory-role             # records the rollout, opens the PR
+go run ./cmd/autopilot status                                               # lists rollouts
+go run ./cmd/autopilot cancel  --rollout <rolloutId>                        # closes the PR unmerged
+```
+
+`propose` chains observe → generate → validate → shadow, then records the outcome in the
+`iamap-rollouts` DynamoDB table:
+
+- `SHADOW_FAILED` if any past call would be denied;
+- `NOTHING_TO_DO` if the proposal grants exactly what the current policy grants;
+- `PR_OPEN` otherwise, after which it opens a labelled PR that edits the role's policy file.
+
+[PR #1](https://github.com/singha105/iam-autopilot/pull/1) is the real one from Day 4,
+closed unmerged because enforcement is not built yet. A merge is the approval
+([ADR-005](DECISIONS.md#adr-005-a-merged-pr-is-the-approval-the-github-token-lives-in-ssm-securestring)).
+The GitHub token comes from `GITHUB_TOKEN` or the SSM SecureString `/iamap/github/token`, which
+you create yourself:
+
+```bash
+read -rs "GH_TOKEN?GitHub token: " && aws ssm put-parameter --name /iamap/github/token --type SecureString --tier Standard --value "$GH_TOKEN"; unset GH_TOKEN
+```
+
+Status changes are conditional writes, so two processes can never both move one rollout.
+
 ### Tear down
 
 ```bash
@@ -250,7 +279,7 @@ make destroy      # interactive terraform destroy
 ## Repository layout
 
 ```
-cmd/autopilot/            CLI: observe (Day 2), generate + shadow (Day 3); propose, report (Day 4)
+cmd/autopilot/            CLI: observe, generate, shadow, propose, cancel, status
 cmd/worker/               one Lambda binary; MODE=worker or MODE=approver  (Days 4-5)
 cmd/demo-*/               the three demo Lambdas                           (Day 1)
 internal/observe/         CloudTrail event history + Access Advisor -> usage profile
@@ -258,7 +287,7 @@ internal/catalog/         embedded IAM action catalog (make catalog), wildcard e
 internal/generate/        least-privilege policy + summary
 internal/shadow/          policy simulator replay
 internal/githubpr/        branch, commit, PR, comments
-internal/store/           DynamoDB rollout records
+internal/store/           DynamoDB rollout records with conditional status moves
 internal/rollout/         enforce, watch and rollback steps
 policies/demo/            the managed policy JSON that Terraform reads and PRs edit
 statemachine/             Step Functions definition (rollout.asl.json)

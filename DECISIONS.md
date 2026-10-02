@@ -8,6 +8,7 @@ Each entry: context, decision, consequences. Day 6 fills in the full set.
 | [ADR-002](#adr-002-exclude-platform-calls-from-observed-usage) | Exclude calls AWS makes with the role's credentials from observed usage | Accepted (Day 2) |
 | [ADR-003](#adr-003-keep-data-plane-actions-only-with-evidence-rule-r4) | Keep unobservable data-plane actions only with evidence (rule R4) | Accepted (Day 3) |
 | [ADR-004](#adr-004-iam-policy-simulator-for-shadow-mode-not-access-analyzer-custom-checks) | IAM policy simulator for shadow mode, not Access Analyzer custom checks | Accepted (Day 3) |
+| [ADR-005](#adr-005-a-merged-pr-is-the-approval-the-github-token-lives-in-ssm-securestring) | A merged PR is the approval; the GitHub token lives in an SSM SecureString | Accepted (Day 4) |
 
 ---
 
@@ -131,8 +132,12 @@ denied anything the role actually did. Two AWS features can answer questions lik
   automated reasoning to compare policies. They are billed per call, about $0.002 each.
   Unused-access analyzers, the other relevant feature, cost about $0.20 per role per month.
 
-**Decision.** Shadow mode replays every observed call (action on its resource) and every
-Access Advisor tracked action in the window through `SimulateCustomPolicy`. It sends one
+**Decision.** Shadow mode replays every observed call (action on the resource it was seen
+on), plus every Access Advisor tracked action in the window that CloudTrail never saw (on
+`*`), through `SimulateCustomPolicy`. A tracked action that *was* observed is tested only on
+its observed resources. Testing it on `*` too demanded more than the role ever used. When
+Access Advisor caught up on Day 4, that made correctly scoped `ssm:GetParameter` and
+`dynamodb:DescribeTable` look like would-be denials. It sends one
 request per resource with up to 50 actions, at 5 requests/second. Any result other than
 `allowed` is a would-be denial and fails `autopilot shadow`. The same test set is also
 simulated against the *current* policy; a denial there means the test set is wrong, not
@@ -150,3 +155,44 @@ SCPs, the permissions boundary, resource policies and the role's other attached 
 in the test set, and listed in the report, instead of being reported as denials. Shadow
 mode proves the past calls are still allowed; it cannot predict future rare calls. The
 post-apply watch and automatic rollback (Days 4-6) cover those.
+
+---
+
+## ADR-005: A merged PR is the approval; the GitHub token lives in an SSM SecureString
+
+**Context.** Tightening a policy can break a workload, so a person must approve every
+change. The approval also needs a record: who approved what, when, and what exactly
+changed. To open PRs, the autopilot needs a GitHub credential, which must be stored
+somewhere the CLI (now) and the rollout Lambda (Day 5) can read it.
+
+**Decision 1: the PR merge is the approval.** `autopilot propose` commits the proposed
+policy to the role's `policyFile` on `autopilot/<rolloutId>` and opens a PR. The body
+holds the per-service table, kept-unobservable actions, the shadow result, validation
+findings and what happens on merge. Merging it is the only way a rollout moves past
+`PR_OPEN`; closing it (`autopilot cancel`) ends the rollout. A hidden
+`<!-- rolloutId: … -->` marker ties the PR to its DynamoDB record.
+
+- *Why:* the reviewer gets a real diff of the policy file, GitHub records who merged and
+  when, branch protection and CODEOWNERS work unchanged, and `main` always shows the
+  policy that is (or is about to be) live. No custom approval UI, no extra service.
+- *Consequences:* until Day 5 wires merge to enforcement, a merge would change `main`
+  without changing AWS. So Day 4's real PR (#1) was closed without merging and its
+  record marked CANCELLED. Status changes use a DynamoDB condition on the current status,
+  so a cancel and an approval cannot both win.
+
+**Decision 2: the token is an SSM Parameter Store SecureString.** `/iamap/github/token`
+uses the Standard tier and the AWS-managed `aws/ssm` key. It is created by hand with the
+AWS CLI, never by Terraform. The CLI uses `GITHUB_TOKEN` when set, otherwise reads the
+parameter with decryption; it never prints it.
+
+- *Why:* Secrets Manager costs $0.40 per secret per month, and a customer-managed KMS
+  key $1 per month. Both are forbidden by the $0 rule (CLAUDE.md). A Standard SecureString
+  on `aws/ssm` is free and still encrypted at rest, with access controlled by IAM. Keeping
+  it out of Terraform keeps the secret out of `terraform.tfstate`.
+- *Token scope:* fine-grained, one repository, with Contents, Pull requests and Issues
+  read/write. Issues covers the `autopilot` label. Day 4 hit both failure modes: a 401
+  from an invalid token and a 403 from a token missing Contents write. Each time the
+  rollout record moved to FAILED and was not left active.
+- *Consequences:* no automatic rotation (Secrets Manager's main extra). Rotation is a
+  manual `put-parameter --overwrite`, acceptable for a one-repo demo token with an
+  expiry date.

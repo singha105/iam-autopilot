@@ -13,6 +13,7 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
@@ -63,18 +64,29 @@ func New(client SimulatorAPI) *Replayer {
 	return &Replayer{IAM: client, Limiter: rate.NewLimiter(5, 1)}
 }
 
-// TestSet is every observed call (action on its resource) plus every Access
-// Advisor tracked action used in the window (on "*"). Actions seen only as
-// platform calls (ADR-002) are skipped and listed: the generator removes them
-// on purpose, because the function's code never makes them.
+// TestSet is every observed call (action on the resource it was seen on)
+// plus every Access Advisor tracked action used in the window that CloudTrail
+// never saw (on "*", since Access Advisor reports no resources).
+//
+// A tracked action that was also observed is tested only on its observed
+// resources. Testing it on "*" as well would demand more than the role ever
+// used: a proposal that correctly scopes ssm:GetParameter to one parameter
+// would "fail" on a call that never happened. This mirrors the generator,
+// where R3 never widens an action R2 already kept.
+//
+// Actions seen only as platform calls (ADR-002) are skipped and listed: the
+// generator removes them on purpose, because the function's code never makes
+// them.
 func TestSet(p observe.Profile) (calls []Call, skipped []string) {
 	set := map[Call]bool{}
+	observed := map[string]bool{}
 	for _, c := range p.ObservedCalls {
 		r := c.Resource
 		if r == "" {
 			r = "*"
 		}
 		set[Call{Action: c.Action, Resource: r}] = true
+		observed[strings.ToLower(c.Action)] = true
 	}
 	platform := p.ExcludedActions()
 	skip := map[string]bool{}
@@ -86,6 +98,9 @@ func TestSet(p observe.Profile) (calls []Call, skipped []string) {
 			if platform[a.Action] {
 				skip[a.Action] = true
 				continue
+			}
+			if observed[strings.ToLower(a.Action)] {
+				continue // tested on the resources it was observed on
 			}
 			set[Call{Action: a.Action, Resource: "*"}] = true
 		}

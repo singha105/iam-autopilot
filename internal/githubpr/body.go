@@ -62,7 +62,11 @@ func RenderPRBody(in BodyInput) string {
 	}
 
 	b.WriteString("\n### Shadow mode\n\n")
-	fmt.Fprintf(&b, "%d past calls replayed through the IAM policy simulator, %d would be denied.", in.Shadow.Tested, len(in.Shadow.Denied))
+	calls := "calls"
+	if in.Shadow.Tested == 1 {
+		calls = "call"
+	}
+	fmt.Fprintf(&b, "%d past %s replayed through the IAM policy simulator, %d would be denied.", in.Shadow.Tested, calls, len(in.Shadow.Denied))
 	if len(in.Shadow.Skipped) > 0 {
 		fmt.Fprintf(&b, " Platform-only actions not replayed (ADR-002): %s.", codeList(in.Shadow.Skipped))
 	}

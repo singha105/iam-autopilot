@@ -198,7 +198,7 @@ func TestProposeDryRunWritesNothing(t *testing.T) {
 		"Branch: autopilot/" + rolloutID,
 		"File:   policies/demo/quarterly.json",
 		"Title:  autopilot: tighten " + cliRole + ":",
-		"1 past calls replayed through the IAM policy simulator, 0 would be denied.",
+		"1 past call replayed through the IAM policy simulator, 0 would be denied.",
 		githubpr.RolloutMarker(rolloutID),
 	} {
 		if !strings.Contains(out, want) {
