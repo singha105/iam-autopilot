@@ -18,9 +18,10 @@ anything gets denied.
 It is written in Go, orchestrated by AWS Step Functions, and built to cost **$0**: it uses
 only features that are free outright or sit far inside AWS's always-free allowances.
 
-> **Status: Day 2 of 6 done.** The foundation, cost guardrails, demo workloads, CI and the
-> **observation engine** (`autopilot observe`) are built and verified against real AWS data.
-> Generation, shadow mode, the PR flow, enforcement, watching and rollback arrive on Days 3–6.
+> **Status: Day 3 of 6 done.** The foundation, cost guardrails, demo workloads and CI, the
+> **observation engine** (`autopilot observe`), the **policy generator** (`autopilot generate`)
+> and **shadow mode** (`autopilot shadow`) are built and verified against real AWS data. The PR
+> flow, enforcement, watching and rollback arrive on Days 4–6.
 > See [PROGRESS.md](PROGRESS.md) for the live checklist.
 
 ## How a rollout works
@@ -199,6 +200,34 @@ throttling retries, and drops calls AWS made with the role's credentials rather 
 function's code ([ADR-002](DECISIONS.md#adr-002-exclude-platform-calls-from-observed-usage)).
 `--record <dir>` saves every raw API response as a redacted test fixture.
 
+### Generate a proposal and prove it in shadow mode
+
+```bash
+go run ./cmd/autopilot generate --role iamap-demo-config-reader-role --profile build/profiles/iamap-demo-config-reader-role.json
+go run ./cmd/autopilot shadow   --role iamap-demo-config-reader-role --policy out/iamap-demo-config-reader-role/proposed-policy.json \
+                                --profile build/profiles/iamap-demo-config-reader-role.json
+```
+
+`generate` reads the role's one policy under `/iamap/managed/`, applies rules R1–R7 against
+the usage profile and the embedded IAM action catalog (`make catalog` refreshes it from AWS's
+Service Authorization Reference), validates the result with Access Analyzer `ValidatePolicy`,
+and writes `out/<role>/proposed-policy.json`, `summary.json` and `summary.md`. `shadow` replays
+every past call through the IAM policy simulator and exits 1 if any would be denied. Both are
+read-only and free. Real results from Day 3:
+
+| Role | Granted before → after | Removed | Shadow |
+|---|---|---|---|
+| inventory | 1273 → 5 | 99.6% | 5/5 allowed |
+| config-reader | 305 → 4 | 98.7% | 2/2 allowed |
+| quarterly | 532 → 1 | 99.8% | 1/1 allowed |
+
+The rules: **R1** remove unused services · **R2** keep observed actions on their resources ·
+**R3** keep Access Advisor tracked actions · **R4** keep data-plane actions only with evidence,
+marked kept-unobservable ([ADR-003](DECISIONS.md#adr-003-keep-data-plane-actions-only-with-evidence-rule-r4)) ·
+**R5** scope only to ARNs the action supports · **R6** keep-lists from `autopilot.yaml` ·
+**R7** never grant more than the current policy. Why the simulator rather than Access Analyzer's
+paid custom checks: [ADR-004](DECISIONS.md#adr-004-iam-policy-simulator-for-shadow-mode-not-access-analyzer-custom-checks).
+
 ### Tear down
 
 ```bash
@@ -221,11 +250,11 @@ make destroy      # interactive terraform destroy
 ## Repository layout
 
 ```
-cmd/autopilot/            CLI: observe (Day 2); generate, shadow, propose, report (Days 3-4)
+cmd/autopilot/            CLI: observe (Day 2), generate + shadow (Day 3); propose, report (Day 4)
 cmd/worker/               one Lambda binary; MODE=worker or MODE=approver  (Days 4-5)
 cmd/demo-*/               the three demo Lambdas                           (Day 1)
 internal/observe/         CloudTrail event history + Access Advisor -> usage profile
-internal/catalog/         embedded IAM action catalog, wildcard expansion
+internal/catalog/         embedded IAM action catalog (make catalog), wildcard expansion
 internal/generate/        least-privilege policy + summary
 internal/shadow/          policy simulator replay
 internal/githubpr/        branch, commit, PR, comments
@@ -236,6 +265,9 @@ statemachine/             Step Functions definition (rollout.asl.json)
 infra/terraform/          all AWS resources; local state, gitignored
 scripts/                  traffic.sh, cost-audit.sh
 testdata/observe/         recorded API responses per demo role (redacted) + golden profiles
+testdata/generate/        recorded current policies (redacted) + golden proposals and summaries
+internal/policy/          deterministic IAM policy documents (sorted keys)
+internal/config/          autopilot.yaml loader (strict)
 autopilot.yaml            roles, keep-lists, data-plane actions, watch window
 CLAUDE.md                 hard zero-cost and safety rules
 PROGRESS.md               day-by-day checklist and findings
@@ -246,9 +278,10 @@ DECISIONS.md              architecture decision records
 
 - **Testing.** Code is unit-tested behind small interfaces with fakes and recorded fixtures;
   tests never call AWS (`go test ./...` passes with credentials unset). The observer has a
-  golden-file test: real API responses recorded from the demo roles
-  (`testdata/observe/<role>/`, account ID redacted to `123456789012`) are replayed and the
-  profile must match `expected-profile.json` byte for byte (`-update` regenerates it).
+  golden-file tests: real API responses recorded from the demo roles (`testdata/observe/` and
+  `testdata/generate/`, account ID redacted to `123456789012`) are replayed and the profile,
+  proposed policy and summary must match their `expected-*.json` byte for byte (`-update`
+  regenerates them). Further tests pin each day's acceptance criteria to that recorded data.
 - **CI.** GitHub Actions runs lint, race tests and the arm64 build on Go 1.25, then
   `terraform fmt`, `init -backend=false` and `validate`, with pinned action SHAs and no
   AWS credentials.

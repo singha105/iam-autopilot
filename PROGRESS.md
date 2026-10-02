@@ -40,22 +40,32 @@ Read this and CLAUDE.md at the start of every session.
 - [x] `make check` passes; pushed
 - [x] CI green on GitHub for the Day 2 head (run 36797344547, both jobs passed)
 
-## Day 3: Policy generator and shadow mode (2026-10-01)
+## Day 3: Policy generator and shadow mode (2026-10-01 / 10-02)
 
-- [ ] Run `make traffic` first
+- [x] Run `make traffic` first (15/15 OK at 2026-10-02T03:29Z)
 - [x] Service Authorization Reference endpoint confirmed (index: JSON array of 455 {service, url, modified})
 - [x] `make catalog` writes internal/catalog/data/actions.json (12 services, 1994 actions,
-      resource types with ARN formats); deterministic on re-run
-- [ ] internal/catalog API: Expand, Matches, SupportsResources, Exists, CountGranted (NotAction -> error)
-- [ ] CurrentPolicy: the one /iamap/managed/ policy, default version, URL-decoded
-- [ ] internal/generate: rules R1-R7, statement grouping, 6,144-char limit, Summary
-- [ ] Validate with Access Analyzer ValidatePolicy (ERROR / SECURITY_WARNING fail the run)
-- [ ] internal/shadow: SimulateCustomPolicy replay at 5 req/s, plus self-test of the current policy
-- [ ] CLI: `autopilot generate` (proposed-policy.json, summary.json, summary.md) and `autopilot shadow`
-- [ ] Tests: R1-R7 table tests, golden proposals per demo role, determinism, shadow denial, validation
-- [ ] Real run for all three roles: 0 would-be denials, validation clean
-- [ ] ADR-003 (blind-spot rule R4) and ADR-004 (simulator, not paid custom checks). The prompt
-      calls them ADR-002/003, but ADR-002 was already used on Day 2 for platform calls.
+      resource types with ARN formats); deterministic on re-run; embedded with go:embed
+- [x] internal/catalog API: Expand, Matches, SupportsResources, Exists, CountGranted (NotAction -> error),
+      plus ARNFitsAction (an ARN must match one of the action's resource-type formats)
+- [x] CurrentPolicy: the one /iamap/managed/ policy, default version, URL-decoded
+- [x] internal/generate: rules R1-R7, statement grouping, 6,144-char limit, Summary (JSON + Markdown)
+- [x] Validate with Access Analyzer ValidatePolicy (ERROR / SECURITY_WARNING fail the run)
+- [x] internal/shadow: SimulateCustomPolicy replay at 5 req/s, grouped by resource, Marker paging,
+      self-test of the current policy
+- [x] CLI: `autopilot generate` (proposed-policy.json, summary.json, summary.md) and `autopilot shadow`
+- [x] Tests: R1-R7 table tests, golden proposals per demo role, determinism, shadow denial exits 1,
+      SECURITY_WARNING fails generate; `go test ./...` passes offline
+- [x] Real run (observe -> generate -> shadow, 1-day window, 2026-10-02): 0 would-be denials and
+      0 validation findings for all three roles
+      - inventory 1273 -> 5 (99.6%): the 5 observed actions; sns, sqs removed
+      - config-reader 305 -> 4 (98.7%): ssm:GetParameter and dynamodb:DescribeTable scoped; GetItem/PutItem
+        kept-unobservable on the table; kms, sns, sqs removed
+      - quarterly 532 -> 1 (99.8%): ssm:GetParameter only (GetParametersByPath removed: the Day 6 risk)
+- [x] ADR-003 (evidence-based R4) and ADR-004 (simulator, not paid custom checks). The prompt
+      called them ADR-002/003, but ADR-002 was already used on Day 2 for platform calls.
+- [x] `make check` passes; pushed
+- [ ] CI green on GitHub for the Day 3 head (checked right after the push; tick in Day 4's first commit)
 
 ## Day 4
 
@@ -81,6 +91,18 @@ Read this and CLAUDE.md at the start of every session.
   because newer releases require Go 1.26. Check `go.mod` after every `go get`.
 
 ## Findings for later days
+
+- **R4 as briefed over-kept (Day 3, decided with the user).** Keeping every configured data-plane action
+  for any service Access Advisor marks as used kept s3 Get/Put/DeleteObject and lambda:InvokeFunction
+  on * for inventory (it only lists). R4 now needs evidence; roles can override dataPlaneActions
+  (ADR-003).
+- **Platform calls also reach Access Advisor (Day 3).** Tracked actions include the Lambda runtime's
+  logs:CreateLogStream and kms:Decrypt. The profile now has structured `excludedCalls`; a service whose
+  only activity is platform calls counts as unused, and shadow skips platform-only actions.
+- **Access Advisor lag again (Day 3).** In a 1-day window it reported 1 of 7 services for inventory
+  and 0 of 6 for config-reader. Observed calls therefore also count as "used" for R1/R4.
+- **Day 4 PR body:** summary.md is ready to paste as the PR description. Proposals encode Resource as
+  an array (["*"]), so the first PR diff also changes the Day 1 files' "Resource": "*" formatting.
 
 - **Lambda runtime calls have no invokedBy (Day 2).** At each cold start the role's session makes
   logs:CreateLogStream (user agent `awslambda-worker/1.0`) and kms:Decrypt of the function's own
@@ -113,4 +135,4 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Next
 
-- Day 3: run `aws login --profile paved` and `make traffic`, then paste the Day 3 prompt.
+- Day 4: run `aws login --profile paved` and `make traffic`, then paste the Day 4 prompt.

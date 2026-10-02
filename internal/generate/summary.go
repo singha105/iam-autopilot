@@ -133,7 +133,7 @@ func (s Summary) Markdown() string {
 	if len(s.KeptUnobservable) == 0 {
 		b.WriteString("None.\n")
 	} else {
-		b.WriteString("CloudTrail event history never records these data-plane calls. They are kept because Access Advisor shows the service was used. Review them by hand.\n\n")
+		b.WriteString("CloudTrail event history never records these data-plane calls. They are kept because the service was used: a resource of it appears in event history (and the actions are scoped to it), or Access Advisor reports use that no observed call explains. Review them by hand.\n\n")
 		for _, k := range s.KeptUnobservable {
 			fmt.Fprintf(&b, "- `%s` on %s\n", k.Action, codeList(k.Resources))
 		}
