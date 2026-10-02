@@ -9,6 +9,10 @@ roles:
   - name: iamap-demo-config-reader-role
     observationDays: 1
     keepActions: []
+    # The owner knows the app only reads and writes one item; without this the
+    # global dynamodb list below would keep all eight data-plane actions.
+    dataPlaneActions:
+      dynamodb: [GetItem, PutItem]
   - name: iamap-demo-quarterly-role
     observationDays: 1
     keepActions: []
@@ -17,8 +21,11 @@ roles:
 neverRemove: []
 
 # Data-plane actions that CloudTrail event history never records. When Access
-# Advisor shows the service was used, these are kept (scoped to resources that
-# were seen) and flagged in the PR.
+# Advisor shows the service was used and there is evidence of data access (a
+# resource of the service was seen, or no management call explains the use),
+# these are kept, scoped to the resources seen, and flagged in the PR (rule R4,
+# ADR-003). A role can override the list per service with its own
+# dataPlaneActions.
 dataPlaneActions:
   dynamodb: [GetItem, PutItem, UpdateItem, DeleteItem, Query, Scan, BatchGetItem, BatchWriteItem]
   s3: [GetObject, PutObject, DeleteObject]

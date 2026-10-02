@@ -15,11 +15,14 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/accessanalyzer"
 	"github.com/aws/aws-sdk-go-v2/service/cloudtrail"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
+	"github.com/singha105/iam-autopilot/internal/generate"
 	"github.com/singha105/iam-autopilot/internal/observe"
+	"github.com/singha105/iam-autopilot/internal/shadow"
 )
 
 type observeOptions struct {
@@ -71,6 +74,9 @@ func parseObserveFlags(args []string, stderr io.Writer) (observeOptions, error) 
 type awsClients struct {
 	CloudTrail observe.CloudTrailAPI
 	IAM        observe.IAMAPI
+	PolicyIAM  generate.IAMAPI
+	Simulator  shadow.SimulatorAPI
+	Analyzer   generate.AccessAnalyzerAPI
 	AccountID  func(context.Context) (string, error)
 }
 
@@ -82,11 +88,15 @@ var loadClients = func(ctx context.Context, region string) (awsClients, error) {
 		return awsClients{}, fmt.Errorf("load AWS config: %w", err)
 	}
 	stsClient := sts.NewFromConfig(cfg)
+	iamClient := iam.NewFromConfig(cfg)
 	return awsClients{
 		// The observer does its own rate limiting and throttling retries, so the
 		// SDK's retryer is turned off for CloudTrail to keep attempts predictable.
 		CloudTrail: cloudtrail.NewFromConfig(cfg, func(o *cloudtrail.Options) { o.RetryMaxAttempts = 1 }),
-		IAM:        iam.NewFromConfig(cfg),
+		IAM:        iamClient,
+		PolicyIAM:  iamClient,
+		Simulator:  iamClient,
+		Analyzer:   accessanalyzer.NewFromConfig(cfg),
 		AccountID: func(ctx context.Context) (string, error) {
 			out, err := stsClient.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 			if err != nil {

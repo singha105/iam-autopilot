@@ -26,6 +26,9 @@ type Role struct {
 	Name            string      `yaml:"name"`
 	ObservationDays int         `yaml:"observationDays"`
 	KeepActions     []KeepEntry `yaml:"keepActions"`
+	// DataPlaneActions overrides the global list per service for this role,
+	// for when the owner knows which unobservable calls the code makes.
+	DataPlaneActions map[string][]string `yaml:"dataPlaneActions"`
 }
 
 // KeepEntry is an action that must never be removed. In YAML it is either a
@@ -125,11 +128,26 @@ func (c Config) Role(name string) (Role, bool) {
 	return Role{}, false
 }
 
-// DataPlane returns the configured data-plane actions of a service as full
+// DataPlane returns the global data-plane actions of a service as full
 // "service:Action" names, sorted.
 func (c Config) DataPlane(service string) []string {
-	var out []string
-	for _, a := range c.DataPlaneActions[service] {
+	return qualify(service, c.DataPlaneActions[service])
+}
+
+// DataPlaneFor returns the role's data-plane actions for a service: the role's
+// override if it lists that service, otherwise the global list.
+func (c Config) DataPlaneFor(role, service string) []string {
+	if r, ok := c.Role(role); ok {
+		if actions, ok := r.DataPlaneActions[service]; ok {
+			return qualify(service, actions)
+		}
+	}
+	return c.DataPlane(service)
+}
+
+func qualify(service string, actions []string) []string {
+	out := []string{}
+	for _, a := range actions {
 		out = append(out, service+":"+a)
 	}
 	sort.Strings(out)

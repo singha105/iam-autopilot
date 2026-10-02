@@ -1,0 +1,26 @@
+{
+  "Policy": {
+    "Arn": "arn:aws:iam::123456789012:policy/iamap/managed/iamap-demo-quarterly-policy",
+    "AttachmentCount": 1,
+    "CreateDate": "2026-09-29T18:11:54Z",
+    "DefaultVersionId": "v1",
+    "Description": "Deliberately over-broad demo policy for iamap-demo-quarterly; managed by the autopilot through policy versions.",
+    "IsAttachable": true,
+    "Path": "/iamap/managed/",
+    "PermissionsBoundaryUsageCount": 0,
+    "PolicyId": "ANPA6OKO2XL2UQD4NEMHT",
+    "PolicyName": "iamap-demo-quarterly-policy",
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "iam-autopilot"
+      },
+      {
+        "Key": "ManagedBy",
+        "Value": "terraform"
+      }
+    ],
+    "UpdateDate": "2026-09-29T18:11:54Z"
+  },
+  "ResultMetadata": {}
+}

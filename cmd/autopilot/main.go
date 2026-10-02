@@ -1,5 +1,5 @@
-// Command autopilot is the local CLI: observe today; generate, shadow, propose
-// and report as later stages land. See ADR-001 for why it uses package flag.
+// Command autopilot is the local CLI: observe, generate and shadow today;
+// propose and report as later stages land. See ADR-001 for why it uses package flag.
 package main
 
 import (
@@ -20,6 +20,10 @@ Usage:
 Commands:
   observe    Build a usage profile for one role from CloudTrail event history
              and IAM Access Advisor (read-only)
+  generate   Propose a least-privilege policy from a usage profile, validate it
+             with Access Analyzer ValidatePolicy, write out/<role>/ (read-only)
+  shadow     Replay past calls through the IAM policy simulator against a
+             proposed policy; exit 1 if any would be denied (read-only)
 
 Run "autopilot <command> -h" for a command's flags.
 `
@@ -41,6 +45,10 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	switch args[0] {
 	case "observe":
 		err = runObserve(ctx, args[1:], stdout, stderr)
+	case "generate":
+		err = runGenerate(ctx, args[1:], stdout, stderr)
+	case "shadow":
+		err = runShadow(ctx, args[1:], stdout, stderr)
 	case "help", "-h", "-help", "--help":
 		fmt.Fprint(stdout, usage)
 		return 0

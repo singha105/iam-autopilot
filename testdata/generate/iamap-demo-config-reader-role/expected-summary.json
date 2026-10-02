@@ -1,0 +1,87 @@
+{
+  "role": "iamap-demo-config-reader-role",
+  "grantedBefore": 305,
+  "grantedAfter": 4,
+  "removedCount": 301,
+  "removedPercent": 98.7,
+  "services": [
+    {
+      "service": "dynamodb",
+      "before": 79,
+      "after": 3,
+      "rule": "R2,R4,R5"
+    },
+    {
+      "service": "kms",
+      "before": 1,
+      "after": 0,
+      "rule": "R1 (only platform calls, ADR-002)"
+    },
+    {
+      "service": "sns",
+      "before": 41,
+      "after": 0,
+      "rule": "R1 (unused)"
+    },
+    {
+      "service": "sqs",
+      "before": 20,
+      "after": 0,
+      "rule": "R1 (unused)"
+    },
+    {
+      "service": "ssm",
+      "before": 164,
+      "after": 1,
+      "rule": "R2,R5"
+    }
+  ],
+  "kept": [
+    {
+      "action": "dynamodb:DescribeTable",
+      "resources": [
+        "arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config"
+      ],
+      "rule": "R2,R5"
+    },
+    {
+      "action": "dynamodb:GetItem",
+      "resources": [
+        "arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config"
+      ],
+      "rule": "R4"
+    },
+    {
+      "action": "dynamodb:PutItem",
+      "resources": [
+        "arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config"
+      ],
+      "rule": "R4"
+    },
+    {
+      "action": "ssm:GetParameter",
+      "resources": [
+        "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/config"
+      ],
+      "rule": "R2,R5"
+    }
+  ],
+  "keptUnobservable": [
+    {
+      "action": "dynamodb:GetItem",
+      "resources": [
+        "arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config"
+      ],
+      "rule": "R4"
+    },
+    {
+      "action": "dynamodb:PutItem",
+      "resources": [
+        "arn:aws:dynamodb:us-east-1:123456789012:table/iamap-demo-config"
+      ],
+      "rule": "R4"
+    }
+  ],
+  "warnings": [],
+  "validation": []
+}

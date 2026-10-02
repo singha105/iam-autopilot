@@ -66,3 +66,33 @@ func TestParseRejects(t *testing.T) {
 		}
 	}
 }
+
+func TestDataPlaneFor(t *testing.T) {
+	c, err := Parse([]byte(`
+roles:
+  - name: narrow
+    dataPlaneActions:
+      dynamodb: [PutItem, GetItem]
+      s3: []
+  - name: default
+dataPlaneActions:
+  dynamodb: [GetItem, PutItem, Scan]
+  s3: [GetObject]
+`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tt := range []struct {
+		role, svc string
+		want      []string
+	}{
+		{"narrow", "dynamodb", []string{"dynamodb:GetItem", "dynamodb:PutItem"}},
+		{"narrow", "s3", []string{}}, // explicitly none
+		{"default", "dynamodb", []string{"dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:Scan"}},
+		{"unknown", "s3", []string{"s3:GetObject"}},
+	} {
+		if got := c.DataPlaneFor(tt.role, tt.svc); !reflect.DeepEqual(got, tt.want) {
+			t.Errorf("DataPlaneFor(%s, %s) = %v, want %v", tt.role, tt.svc, got, tt.want)
+		}
+	}
+}

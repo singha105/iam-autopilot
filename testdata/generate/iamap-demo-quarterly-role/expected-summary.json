@@ -1,0 +1,45 @@
+{
+  "role": "iamap-demo-quarterly-role",
+  "grantedBefore": 532,
+  "grantedAfter": 1,
+  "removedCount": 531,
+  "removedPercent": 99.8,
+  "services": [
+    {
+      "service": "ec2",
+      "before": 194,
+      "after": 0,
+      "rule": "R1 (unused)"
+    },
+    {
+      "service": "logs",
+      "before": 133,
+      "after": 0,
+      "rule": "R1 (only platform calls, ADR-002)"
+    },
+    {
+      "service": "sns",
+      "before": 41,
+      "after": 0,
+      "rule": "R1 (unused)"
+    },
+    {
+      "service": "ssm",
+      "before": 164,
+      "after": 1,
+      "rule": "R2,R5"
+    }
+  ],
+  "kept": [
+    {
+      "action": "ssm:GetParameter",
+      "resources": [
+        "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly/schedule"
+      ],
+      "rule": "R2,R5"
+    }
+  ],
+  "keptUnobservable": [],
+  "warnings": [],
+  "validation": []
+}

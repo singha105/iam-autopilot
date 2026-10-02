@@ -217,6 +217,29 @@ func TestRules(t *testing.T) {
 			wantKept: map[string]string{"dynamodb:GetItem": "*", "dynamodb:PutItem": "*", "dynamodb:Scan": "*"},
 		},
 		{
+			name:     "R4 keeps nothing extra for a service seen only through calls on *",
+			current:  allow("dynamodb:*"),
+			profile:  prof([]observe.ObservedCall{call("dynamodb:ListTables", "*")}, []string{"dynamodb"}, nil),
+			config:   cfg(),
+			wantKept: map[string]string{"dynamodb:ListTables": "*"},
+			check: func(t *testing.T, r Result) {
+				if len(r.Summary.KeptUnobservable) != 0 || !hasWarning(r, "R4: dynamodb was used only through calls on") {
+					t.Errorf("keptUnobservable = %+v warnings = %v", r.Summary.KeptUnobservable, r.Summary.Warnings)
+				}
+			},
+		},
+		{
+			name:    "R4 uses the role's dataPlaneActions override",
+			current: allow("dynamodb:*"),
+			profile: prof([]observe.ObservedCall{call("dynamodb:DescribeTable", tableARN)}, []string{"dynamodb"}, nil),
+			config: func() config.Config {
+				c := cfg()
+				c.Roles[0].DataPlaneActions = map[string][]string{"dynamodb": {"GetItem"}}
+				return c
+			}(),
+			wantKept: map[string]string{"dynamodb:DescribeTable": tableARN, "dynamodb:GetItem": tableARN},
+		},
+		{
 			name:     "R4 does not apply to an unused service",
 			current:  allow("ssm:*", "dynamodb:*"),
 			profile:  prof([]observe.ObservedCall{call("ssm:GetParameter", paramARN)}, []string{"ssm"}, nil),

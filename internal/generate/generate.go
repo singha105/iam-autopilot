@@ -58,9 +58,11 @@ type generator struct {
 //	R2 Every observed action is kept, with the resources it was seen on.
 //	R3 Every Access Advisor tracked action used in the window is kept ("*"),
 //	   unless it was only ever a platform call.
-//	R4 For a used service, the configured data-plane actions that the current
-//	   policy grants are kept, scoped to ARNs observed for that service when
-//	   they fit, else "*"; marked kept-unobservable.
+//	R4 For a used service, the configured data-plane actions (per-role override
+//	   first) that the current policy grants are kept and marked
+//	   kept-unobservable: scoped to concrete ARNs observed for that service, or
+//	   "*" if the service had no observed call at all. If it was seen only via
+//	   calls on "*", they are not kept and a warning says so (ADR-003).
 //	R5 Resources: an action that supports resources keeps the observed ARNs
 //	   that fit its resource types; otherwise "*".
 //	R6 keepActions and neverRemove from autopilot.yaml are always kept.
@@ -133,19 +135,37 @@ func Generate(current policy.Document, profile observe.Profile, cfg config.Confi
 			}
 		}
 	}
-	// R4: the data-plane blind spot.
+	// R4: the data-plane blind spot (ADR-003). Data-plane actions are kept
+	// only with evidence: a concrete resource of the service was observed
+	// (scope to it), or the service was used with no observed call at all
+	// (pure data-plane use, "*"). A service seen only through calls on "*"
+	// (listing buckets, say) gets nothing extra: keeping s3:GetObject on every
+	// bucket because the code listed buckets would be a guess, not evidence.
 	for _, svc := range sortedKeys(used) {
-		for _, a := range cfg.DataPlane(svc) {
-			if !g.grantedByCurrent(a) {
-				continue
+		var candidates []string
+		for _, a := range cfg.DataPlaneFor(profile.RoleName, svc) {
+			if _, ok := g.kept[g.canonical(a)]; !ok && g.grantedByCurrent(a) {
+				candidates = append(candidates, a)
 			}
-			if _, ok := g.kept[g.canonical(a)]; ok {
-				continue
+		}
+		if len(candidates) == 0 {
+			continue
+		}
+		var concrete []string
+		for _, c := range observedBySvc[svc] {
+			if c.Resource != "*" {
+				concrete = append(concrete, c.Resource)
 			}
+		}
+		if len(observedBySvc[svc]) > 0 && len(concrete) == 0 {
+			g.warnf("R4: %s was used only through calls on \"*\" (no resource seen), so its data-plane actions were not kept: %s. Add keepActions if the code needs them.", svc, strings.Join(candidates, ", "))
+			continue
+		}
+		for _, a := range candidates {
 			var res []string
-			for _, c := range observedBySvc[svc] {
-				if c.Resource != "*" && cat.ARNFitsAction(a, c.Resource) {
-					res = append(res, c.Resource)
+			for _, r := range concrete {
+				if cat.ARNFitsAction(a, r) {
+					res = append(res, r)
 				}
 			}
 			if len(res) == 0 {

@@ -1,0 +1,15 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly/schedule"
+      ],
+      "Sid": "Ssm0"
+    }
+  ],
+  "Version": "2012-10-17"
+}

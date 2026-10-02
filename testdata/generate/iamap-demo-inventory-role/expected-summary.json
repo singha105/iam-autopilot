@@ -1,0 +1,88 @@
+{
+  "role": "iamap-demo-inventory-role",
+  "grantedBefore": 1273,
+  "grantedAfter": 5,
+  "removedCount": 1268,
+  "removedPercent": 99.6,
+  "services": [
+    {
+      "service": "ec2",
+      "before": 826,
+      "after": 2,
+      "rule": "R2"
+    },
+    {
+      "service": "iam",
+      "before": 72,
+      "after": 1,
+      "rule": "R2"
+    },
+    {
+      "service": "lambda",
+      "before": 134,
+      "after": 1,
+      "rule": "R2"
+    },
+    {
+      "service": "s3",
+      "before": 180,
+      "after": 1,
+      "rule": "R2"
+    },
+    {
+      "service": "sns",
+      "before": 41,
+      "after": 0,
+      "rule": "R1 (unused)"
+    },
+    {
+      "service": "sqs",
+      "before": 20,
+      "after": 0,
+      "rule": "R1 (unused)"
+    }
+  ],
+  "kept": [
+    {
+      "action": "ec2:DescribeInstances",
+      "resources": [
+        "*"
+      ],
+      "rule": "R2"
+    },
+    {
+      "action": "ec2:DescribeRegions",
+      "resources": [
+        "*"
+      ],
+      "rule": "R2"
+    },
+    {
+      "action": "iam:ListRoles",
+      "resources": [
+        "*"
+      ],
+      "rule": "R2"
+    },
+    {
+      "action": "lambda:ListFunctions",
+      "resources": [
+        "*"
+      ],
+      "rule": "R2"
+    },
+    {
+      "action": "s3:ListAllMyBuckets",
+      "resources": [
+        "*"
+      ],
+      "rule": "R2"
+    }
+  ],
+  "keptUnobservable": [],
+  "warnings": [
+    "R4: lambda was used only through calls on \"*\" (no resource seen), so its data-plane actions were not kept: lambda:InvokeFunction. Add keepActions if the code needs them.",
+    "R4: s3 was used only through calls on \"*\" (no resource seen), so its data-plane actions were not kept: s3:DeleteObject, s3:GetObject, s3:PutObject. Add keepActions if the code needs them."
+  ],
+  "validation": []
+}

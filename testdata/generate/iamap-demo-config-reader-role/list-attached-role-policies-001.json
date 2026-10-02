@@ -1,0 +1,15 @@
+{
+  "AttachedPolicies": [
+    {
+      "PolicyArn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+      "PolicyName": "AWSLambdaBasicExecutionRole"
+    },
+    {
+      "PolicyArn": "arn:aws:iam::123456789012:policy/iamap/managed/iamap-demo-config-reader-policy",
+      "PolicyName": "iamap-demo-config-reader-policy"
+    }
+  ],
+  "IsTruncated": false,
+  "Marker": null,
+  "ResultMetadata": {}
+}

@@ -1,0 +1,9 @@
+{
+  "PolicyVersion": {
+    "CreateDate": "2026-09-29T18:11:54Z",
+    "Document": "%7B%22Statement%22%3A%5B%7B%22Action%22%3A%5B%22ec2%3A%2A%22%2C%22iam%3AGet%2A%22%2C%22iam%3AList%2A%22%2C%22lambda%3A%2A%22%2C%22s3%3A%2A%22%2C%22sns%3A%2A%22%2C%22sqs%3A%2A%22%5D%2C%22Effect%22%3A%22Allow%22%2C%22Resource%22%3A%22%2A%22%2C%22Sid%22%3A%22DeliberatelyBroadDemoPolicy%22%7D%5D%2C%22Version%22%3A%222012-10-17%22%7D",
+    "IsDefaultVersion": true,
+    "VersionId": "v1"
+  },
+  "ResultMetadata": {}
+}
