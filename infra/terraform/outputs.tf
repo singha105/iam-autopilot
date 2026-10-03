@@ -35,3 +35,21 @@ output "github_token_parameter" {
   description = "SSM SecureString parameter (created by hand, not by Terraform) holding the GitHub token."
   value       = local.github_token_parameter
 }
+
+output "state_machine_arn" {
+  description = "The rollout state machine (make rollout ROLE=...)."
+  value       = aws_sfn_state_machine.rollout.arn
+}
+
+output "worker_function_name" {
+  value = aws_lambda_function.worker.function_name
+}
+
+output "approver_function_name" {
+  value = aws_lambda_function.approver.function_name
+}
+
+output "github_approver_role_arn" {
+  description = "Set as the IAMAP_APPROVER_ROLE_ARN repository variable."
+  value       = aws_iam_role.github_approver.arn
+}

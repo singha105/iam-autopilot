@@ -82,6 +82,16 @@ express="$(awsj stepfunctions list-state-machines \
   --query 'stateMachines[?starts_with(name, `iamap-`) && type!=`STANDARD`].name' | jq -r '.[]')"
 if [ -n "$express" ]; then bad "non-STANDARD state machines: $express"; else pass "no EXPRESS iamap state machines"; fi
 
+# 8. Step Functions: no CloudWatch logging on iamap state machines.
+sms="$(awsj stepfunctions list-state-machines \
+  --query 'stateMachines[?starts_with(name, `iamap-`)].stateMachineArn' | jq -r '.[]')"
+logged=""
+for sm in $sms; do
+  level="$(awsj stepfunctions describe-state-machine --state-machine-arn "$sm" --query 'loggingConfiguration.level' | jq -r '. // "OFF"')"
+  [ "$level" != OFF ] && logged="$logged $sm($level)"
+done
+if [ -n "$logged" ]; then bad "state machines with logging on:$logged"; else pass "$(grep -c . <<<"$sms" || true) iamap state machine(s) with logging OFF"; fi
+
 echo "---"
 if [ "$fail" -ne 0 ]; then
   echo "cost-audit: FAILED"
