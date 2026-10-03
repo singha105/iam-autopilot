@@ -18,11 +18,10 @@ anything gets denied.
 It is written in Go, orchestrated by AWS Step Functions, and built to cost **$0**: it uses
 only features that are free outright or sit far inside AWS's always-free allowances.
 
-> **Status: Day 4 of 6 done.** Built and verified against real AWS data and a real GitHub PR:
-> the foundation and cost guardrails, the observation engine (`autopilot observe`), the policy
-> generator (`autopilot generate`), shadow mode (`autopilot shadow`), and the **proposal flow**
-> (`autopilot propose` records a rollout and opens the PR; `autopilot cancel` closes it).
-> Enforcement on merge, watching and automatic rollback arrive on Days 5–6.
+> **Status: Day 5 of 6 done.** The whole loop runs in AWS: a Step Functions rollout observed
+> the inventory role, opened a PR, waited for the merge, applied the tightened policy as a new
+> version, watched it for 45 minutes and finished `ENFORCED` (1273 → 5 actions). The
+> automatic-rollback demo (a quarter-end job the observation never saw) is Day 6.
 > See [PROGRESS.md](PROGRESS.md) for the live checklist.
 
 ## How a rollout works
@@ -257,6 +256,43 @@ read -rs "GH_TOKEN?GitHub token: " && aws ssm put-parameter --name /iamap/github
 
 Status changes are conditional writes, so two processes can never both move one rollout.
 
+### Run a full rollout in AWS
+
+```bash
+make rollout ROLE=iamap-demo-inventory-role   # starts the iamap-rollout state machine
+make status                                    # autopilot report --short
+```
+
+The STANDARD Step Functions workflow `iamap-rollout` calls one Go Lambda
+(`iamap-worker`) for every step:
+
+- **observe → generate → shadow → open the PR.** If shadow mode finds a would-be denial
+  the rollout stops at `ShadowFailed`; if nothing would change it ends at `NothingToDo`.
+- **Wait for approval.** The execution waits on a task token for up to 7 days.
+- **Merge the PR.** The `approve-rollout` workflow assumes `iamap-github-approver` through
+  OIDC ([ADR-007](DECISIONS.md#adr-007-github-actions-approves-through-oidc-scoped-to-this-repos-pull_request-events))
+  and calls `iamap-approver`. The approver re-checks the merge with GitHub and resumes
+  the execution.
+- **Enforce.** The new policy becomes a new default *version*, and the previous version
+  is kept as the rollback target
+  ([ADR-006](DECISIONS.md#adr-006-one-managed-policy-per-role-changed-through-policy-versions)).
+- **Watch.** Every 5 minutes for 30 + 15 minutes, check CloudTrail for AccessDenied and
+  the Lambda `Errors` metric
+  ([ADR-008](DECISIONS.md#adr-008-two-breakage-signals-cloudtrail-accessdenied-and-the-lambda-errors-metric)).
+- **End.** `Done`, with the record ENFORCED and a final PR comment. Or, on any breakage,
+  `Rollback` restores the previous version, comments, and opens a revert PR that adds
+  the denied action to `keepActions`.
+
+A normal rollout is **35 state transitions** (6 + 3 per watch iteration × 9 + Complete +
+Done). The free tier is 4,000 transitions a month, so about 114 rollouts. The workflow
+logs nothing to CloudWatch.
+
+**The first real rollout (Day 5, inventory role)** ran end to end: proposal
+[PR #2](https://github.com/singha105/iam-autopilot/pull/2) merged, approved through OIDC,
+policy version `v1` → `v2` (1273 → 5 actions, 99.6% removed), 9 clean watch iterations
+with traffic running, `Done` after 35 transitions, record `ENFORCED`, and `terraform plan`
+clean afterwards because `main` holds the same JSON as the live version.
+
 ### Tear down
 
 ```bash
@@ -274,13 +310,15 @@ make destroy      # interactive terraform destroy
 | `check` | `lint` + `test` + `tf-fmt` + `tf-validate` |
 | `plan` / `apply` | Build, then plan to `tfplan`; apply only that saved plan |
 | `traffic` / `cost-audit` | Run `scripts/traffic.sh` / `scripts/cost-audit.sh` |
+| `rollout ROLE=<name>` | Start a rollout execution; prints the execution ARN and console link |
+| `status` | `autopilot report --short`: every rollout with status, PR and removed % |
 | `destroy` | Interactive `terraform destroy` |
 
 ## Repository layout
 
 ```
 cmd/autopilot/            CLI: observe, generate, shadow, propose, cancel, status
-cmd/worker/               one Lambda binary; MODE=worker or MODE=approver  (Days 4-5)
+cmd/worker/               one Lambda binary; MODE=worker or MODE=approver
 cmd/demo-*/               the three demo Lambdas                           (Day 1)
 internal/observe/         CloudTrail event history + Access Advisor -> usage profile
 internal/catalog/         embedded IAM action catalog (make catalog), wildcard expansion
@@ -288,9 +326,9 @@ internal/generate/        least-privilege policy + summary
 internal/shadow/          policy simulator replay
 internal/githubpr/        branch, commit, PR, comments
 internal/store/           DynamoDB rollout records with conditional status moves
-internal/rollout/         enforce, watch and rollback steps
+internal/rollout/         BuildPlan, enforce, watch, rollback, complete, approve
 policies/demo/            the managed policy JSON that Terraform reads and PRs edit
-statemachine/             Step Functions definition (rollout.asl.json)
+statemachine/             Step Functions definition (rollout.asl.json) + structure tests
 infra/terraform/          all AWS resources; local state, gitignored
 scripts/                  traffic.sh, cost-audit.sh
 testdata/observe/         recorded API responses per demo role (redacted) + golden profiles

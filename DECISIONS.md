@@ -9,6 +9,9 @@ Each entry: context, decision, consequences. Day 6 fills in the full set.
 | [ADR-003](#adr-003-keep-data-plane-actions-only-with-evidence-rule-r4) | Keep unobservable data-plane actions only with evidence (rule R4) | Accepted (Day 3) |
 | [ADR-004](#adr-004-iam-policy-simulator-for-shadow-mode-not-access-analyzer-custom-checks) | IAM policy simulator for shadow mode, not Access Analyzer custom checks | Accepted (Day 3) |
 | [ADR-005](#adr-005-a-merged-pr-is-the-approval-the-github-token-lives-in-ssm-securestring) | A merged PR is the approval; the GitHub token lives in an SSM SecureString | Accepted (Day 4) |
+| [ADR-006](#adr-006-one-managed-policy-per-role-changed-through-policy-versions) | One managed policy per role, changed through policy versions | Accepted (Day 5) |
+| [ADR-007](#adr-007-github-actions-approves-through-oidc-scoped-to-this-repos-pull_request-events) | GitHub Actions approves through OIDC, scoped to this repo's pull_request events | Accepted (Day 5) |
+| [ADR-008](#adr-008-two-breakage-signals-cloudtrail-accessdenied-and-the-lambda-errors-metric) | Two breakage signals: CloudTrail AccessDenied and the Lambda Errors metric | Accepted (Day 5) |
 
 ---
 
@@ -196,3 +199,115 @@ parameter with decryption; it never prints it.
 - *Consequences:* no automatic rotation (Secrets Manager's main extra). Rotation is a
   manual `put-parameter --overwrite`, acceptable for a one-repo demo token with an
   expiry date.
+
+---
+
+## ADR-006: One managed policy per role, changed through policy versions
+
+**Context.** The autopilot must apply a tightened policy and be able to undo it within
+seconds when something breaks. The options are rewriting an inline policy, attaching a new
+managed policy and detaching the old one, or adding a new *version* of one customer-managed
+policy.
+
+**Decision.** Each managed role has exactly one customer-managed policy under
+`/iamap/managed/` (enforced by `CurrentPolicy`). Enforce calls `CreatePolicyVersion` with
+`SetAsDefault=true` and records the old default as `prevVersionId`. Rollback is a single
+`SetDefaultPolicyVersion(prevVersionId)` call. Complete keeps the previous version, so a
+manual rollback is one documented CLI command. IAM keeps at most 5 versions; when there
+are 5, the oldest non-default version is deleted first. Neither the default nor the
+rollback target is ever deleted.
+
+**Why.** Rollback is atomic and fast: no detach/attach window and no copy of the old
+document to keep. IAM stores both documents. In the Day 5 run, enforcement took about
+2 s from approval (`v1` → `v2`). The role's attachments never change, and Terraform
+keeps owning the policy *resource* while the autopilot owns its *versions*.
+
+**Consequences.**
+- **Retry safety.** Enforce writes `prevVersionId` before `CreatePolicyVersion`. A retried
+  Lambda invocation sees the default has already moved and reuses that version instead
+  of creating another and losing the real rollback target.
+- **Stale proposals.** A proposal is refused if the default version moved after it was
+  built.
+- **Terraform stays in sync.** The merged PR puts the same JSON in `main` that the version
+  holds, so `terraform plan` shows no change after a rollout (verified on Day 5).
+
+---
+
+## ADR-007: GitHub Actions approves through OIDC, scoped to this repo's pull_request events
+
+**Context.** The approval (a merged PR, ADR-005) happens in GitHub; the rollout waits in
+AWS. Something in GitHub must tell AWS "PR #N was merged" without long-lived AWS keys in
+the repository.
+
+**Decision.**
+- **The workflow.** `approve-rollout.yml` runs when a PR into `main` closes and its head
+  branch starts with `autopilot/`. It gets a GitHub OIDC token (`id-token: write`) and
+  assumes `iamap-github-approver` with `sts:AssumeRoleWithWebIdentity`.
+- **The trust conditions.** `aud = sts.amazonaws.com`, and `sub` is this repository's
+  `pull_request` subject.
+- **What the role can do.** Exactly one thing: invoke `iamap-approver`.
+- **What the approver checks.** It trusts nothing in the event. It checks that the PR
+  number matches the rollout record, asks the GitHub API whether the PR was really
+  merged, and only then calls `SendTaskSuccess` with the task token stored in DynamoDB.
+  A PR closed without merging leads to `SendTaskFailure(PRClosed)`, which cancels the
+  rollout.
+
+**Immutable subject.** The first real approval failed with
+`Not authorized to perform sts:AssumeRoleWithWebIdentity`. This repository uses GitHub's
+*immutable subject* format, which embeds the owner and repository IDs:
+`repo:singha105@173531525/iam-autopilot@1396239326:pull_request`, not
+`repo:singha105/iam-autopilot:pull_request`. The trust policy now uses that form; check a
+repository's format with `gh api repos/<owner>/<repo>/actions/oidc/customization/sub`. It
+is stricter than the legacy form: a deleted and re-created repository, or a re-registered
+account name, can never match. The IDs are public, not secrets. The failure was safe: the
+rollout kept waiting at AwaitApproval, and re-running the workflow after the fix approved it.
+
+**Trade-off.** Any `pull_request` run of this repository can assume the role, from a
+branch pushed by anyone with write access. That is acceptable here because the role can
+only invoke the approver, the approver re-checks the merge with GitHub, and merging
+needs write access anyway. Pull requests from forks get no OIDC token with write
+permissions. A stricter setup would run the job in a GitHub **environment with required
+reviewers** and trust `sub = repo:…:environment:<name>`, so a second person confirms
+before AWS is ever called. Another option is `sub` on the merge commit's `ref`. Neither
+is needed for a one-person demo.
+
+---
+
+## ADR-008: Two breakage signals: CloudTrail AccessDenied and the Lambda Errors metric
+
+**Context.** After enforcement the autopilot must notice quickly if the tightened policy
+broke the workload, using only free signals (no trail, no alarms, no `GetMetricData`).
+
+**Decision.** Every `pollSeconds` (300) until `watch.minutes + lagBufferMinutes` (30 + 15)
+have passed since `enforcedAt`, the Watch step checks:
+
+1. **CloudTrail event history.** Any call by the role since `enforcedAt` with an
+   authorization error code (`AccessDenied*`, `*UnauthorizedOperation`,
+   `AuthorizationError`). It uses the observer's session-issuer filter, so other roles'
+   events with the same username never count. The denied *action names* are what the
+   revert PR adds to `keepActions`.
+2. **The Lambda `Errors` metric** for the function, Sum over 60-second periods through
+   `GetMetricStatistics` (free; `GetMetricData` is not used).
+
+Either signal triggers a rollback. If only the metric fired, the rollback still happens,
+and the PR comment says the cause could not be tied to a specific action.
+
+**Why two signals.** They are complementary:
+- **The metric is fast but blind.** It updates within about a minute, but it does not say
+  *which* permission was missing, and it also fires for bugs that have nothing to do with
+  IAM.
+- **Event history is precise but slow.** It names the denied action and resource, but
+  delivery can take up to about 15 minutes (hence the 15-minute lag buffer before a
+  rollout is declared done).
+
+The metric catches breakage early; CloudTrail explains it and feeds the keep-list.
+
+**Consequences.**
+- A workload error unrelated to IAM during the watch causes a rollback, which is a false
+  positive that costs only a re-proposal.
+- Code paths that don't run during the 45-minute watch (the quarter-end job) aren't
+  covered. Day 6 shows how that is caught later, and the keep-list makes the system
+  remember it.
+- A denied *data-plane* call (DynamoDB `GetItem`, S3 `GetObject`) is a data event, so
+  event history never shows it, denied or not. Only the `Errors` metric notices it, which
+  is a third reason for two signals. In that case the rollback cannot name the action.

@@ -1,0 +1,16 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "ec2:Describe*",
+        "logs:*",
+        "sns:*",
+        "ssm:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "DeliberatelyBroadDemoPolicy"
+    }
+  ],
+  "Version": "2012-10-17"
+}

@@ -99,22 +99,34 @@ Read this and CLAUDE.md at the start of every session.
 - [x] `make check` passes; pushed
 - [x] CI green on GitHub for the Day 4 head (run 36968945611, both jobs passed)
 
-## Day 5: The rollout runs in AWS (2026-10-02)
+## Day 5: The rollout runs in AWS (2026-10-02 / 10-03)
 
-- [ ] Run `make traffic` first
+- [x] Run `make traffic` first (15/15 OK)
 - [x] Proposal pipeline extracted to rollout.BuildPlan, shared by the CLI and the worker
-- [ ] internal/rollout: Enforce (5-version pruning, safety re-check), Watch (CloudTrail denials +
-      Lambda Errors via GetMetricStatistics), Rollback (+ PR comment, revert PR), Complete; tests
-- [ ] cmd/worker: MODE=worker steps and MODE=approver (approve only)
-- [ ] statemachine/rollout.asl.json (STANDARD, retries, catches, no logging); transitions counted
-- [ ] Terraform: worker/approver Lambdas + roles, state machine, GitHub OIDC provider + approver role;
-      plan reviewed, applied; `make cost-audit` passes
-- [ ] .github/workflows/approve-rollout.yml (OIDC, autopilot/ branches only); repo variable set by hand
-- [ ] `make rollout ROLE=...`, `make status` (`autopilot report --short`)
-- [ ] Real rollout of the inventory role: PR merged -> approved -> enforced -> watched -> Done;
-      default policy version changed; terraform plan clean
-- [ ] ADR-006 (policy versions), ADR-007 (OIDC approval), ADR-008 (two breakage signals). The prompt
-      calls them ADR-005..007, but ADR-005 was used on Day 4.
+- [x] internal/rollout: Enforce (5-version pruning, safety re-check, stale-proposal refusal, retry-safe
+      via prevVersionId saved first), Watch (CloudTrail denials + Lambda Errors via GetMetricStatistics),
+      Rollback (+ PR comment, revert PR), Complete, Cancel, MarkFailed, Approve; unit tests for each
+- [x] cmd/worker: MODE=worker steps and MODE=approver (approve only); smoke-tested in AWS
+- [x] statemachine/rollout.asl.json (STANDARD, retries, catches, no logging); structure test counts
+      35 transitions for a normal rollout (free tier: 4,000/month)
+- [x] Terraform: worker/approver Lambdas + roles, state machine, GitHub OIDC provider + approver role;
+      plan reviewed, applied; `make cost-audit` passes (now also checks state machine logging is OFF)
+- [x] .github/workflows/approve-rollout.yml; repo variable IAMAP_APPROVER_ROLE_ARN set (via gh, on request)
+- [x] `make rollout ROLE=...`, `make status` (`autopilot report --short`)
+- [x] Real rollout of the inventory role (2026-10-03):
+      - execution started 00:54Z; PR https://github.com/singha105/iam-autopilot/pull/2 opened by the
+        state machine; merged 02:51Z (by singha105, with the user's explicit go-ahead)
+      - first approve run FAILED (OIDC: not authorized to AssumeRoleWithWebIdentity): this repo uses
+        GitHub's immutable subject format; trust policy fixed (plan approved), run re-run -> approved
+      - enforced 02:54:34Z (v1 -> v2, 1273 -> 5 actions); traffic during the watch 15/15 twice
+        (02:55Z, 03:10Z); 9 watch iterations, 0 denials, 0 Lambda errors
+      - execution SUCCEEDED 03:40:11Z in Done; 35 transitions (as the test predicted); record ENFORCED;
+        final metrics comment on PR #2; `aws iam get-policy` default version v2 (v1 kept)
+      - `terraform plan` clean afterwards (main's JSON = applied version); `make cost-audit` passes
+- [x] ADR-006 (policy versions), ADR-007 (OIDC approval, immutable subject, environment trade-off),
+      ADR-008 (two breakage signals). The prompt calls them ADR-005..007; ADR-005 was used on Day 4.
+- [x] `make check` passes; pushed
+- [ ] CI green on GitHub for the Day 5 head (checked right after the push; tick in Day 6's first commit)
 
 ## Day 6
 
@@ -131,6 +143,17 @@ Read this and CLAUDE.md at the start of every session.
   because newer releases require Go 1.26. Check `go.mod` after every `go get`.
 
 ## Findings for later days
+
+- **States task actions have no resource types (Day 5).** states:SendTaskSuccess/SendTaskFailure can
+  only be granted on "*"; the brief's state-machine ARN would have denied every approval. Checked
+  against the Service Authorization Reference before writing the role.
+- **OIDC immutable subject (Day 5).** `gh api repos/singha105/iam-autopilot/actions/oidc/customization/sub`
+  shows use_immutable_subject=true; trust `sub` must be repo:singha105@173531525/iam-autopilot@1396239326:pull_request.
+- **Merged PRs add commits to main (Day 5).** Merging PR #2 put its commit and a merge commit on main
+  (not counted in the day's commit budget). Run `git pull` before `terraform plan` after a rollout.
+- **Day 6 setup:** quarterly's rollout will remove ssm:GetParametersByPath; invoking quarterly with
+  {"mode":"quarter-end"} during the watch should be denied -> Rollback -> revert PR adding it to
+  keepActions. The rollouts table now has 1 ENFORCED, 1 CANCELLED and 2 FAILED inventory records.
 
 - **Day 5 approver:** `autopilot status` shows the rollout; the PR body ends with
   `<!-- rolloutId: ... -->` and the record holds prNumber/prBranch, so the approve workflow can map a
@@ -185,4 +208,4 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Next
 
-- Day 5: run `aws login --profile paved` and `make traffic`, then paste the Day 5 prompt.
+- Day 6: run `aws login --profile paved` and `make traffic`, then paste the Day 6 prompt.

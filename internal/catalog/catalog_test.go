@@ -153,7 +153,7 @@ func TestEmbeddedCatalog(t *testing.T) {
 		t.Error("table ARN should fit dynamodb:GetItem")
 	}
 	for _, name := range []string{"inventory", "config-reader", "quarterly"} {
-		raw, err := os.ReadFile("../../policies/demo/" + name + ".json")
+		raw, err := os.ReadFile("../../testdata/day1/" + name + ".json")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -163,7 +163,7 @@ func TestEmbeddedCatalog(t *testing.T) {
 		}
 		granted, err := c.Granted(doc)
 		if err != nil || len(granted) < 100 {
-			t.Errorf("%s grants %d actions (err %v); the demo policies are deliberately broad", name, len(granted), err)
+			t.Errorf("%s (Day 1 version) grants %d actions (err %v); the original demo policies are deliberately broad", name, len(granted), err)
 		}
 		for _, a := range granted {
 			if strings.HasPrefix(a, "iam:") && !strings.HasPrefix(a, "iam:Get") && !strings.HasPrefix(a, "iam:List") {

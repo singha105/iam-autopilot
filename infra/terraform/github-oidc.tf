@@ -2,6 +2,13 @@
 # Day 1 found no token.actions.githubusercontent.com provider in the account,
 # so it is created here (free).
 
+locals {
+  github_owner    = "singha105"
+  github_owner_id = 173531525
+  github_repo     = "iam-autopilot"
+  github_repo_id  = 1396239326
+}
+
 resource "aws_iam_openid_connect_provider" "github" {
   url            = "https://token.actions.githubusercontent.com"
   client_id_list = ["sts.amazonaws.com"]
@@ -23,11 +30,15 @@ data "aws_iam_policy_document" "github_trust" {
       values   = ["sts.amazonaws.com"]
     }
 
-    # Only pull_request workflow runs of this repository (ADR-007).
+    # Only pull_request workflow runs of this repository (ADR-007). This repo
+    # uses GitHub's immutable subject format, which pins the owner and
+    # repository IDs (public, not secret): a deleted-and-recreated repo or a
+    # re-registered account name can never match. Check the format with
+    #   gh api repos/singha105/iam-autopilot/actions/oidc/customization/sub
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:singha105/iam-autopilot:pull_request"]
+      values   = ["repo:${local.github_owner}@${local.github_owner_id}/${local.github_repo}@${local.github_repo_id}:pull_request"]
     }
   }
 }

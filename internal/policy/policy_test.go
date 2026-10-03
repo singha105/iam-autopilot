@@ -46,7 +46,7 @@ func TestEncodeSortsKeysAndKeepsCondition(t *testing.T) {
 // writes arrays, which IAM treats identically; the meaning must survive.
 func TestDemoPoliciesRoundTrip(t *testing.T) {
 	for _, name := range []string{"inventory", "config-reader", "quarterly"} {
-		raw, err := os.ReadFile("../../policies/demo/" + name + ".json")
+		raw, err := os.ReadFile("../../testdata/day1/" + name + ".json")
 		if err != nil {
 			t.Fatal(err)
 		}

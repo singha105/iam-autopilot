@@ -1,0 +1,17 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "dynamodb:*",
+        "kms:Decrypt",
+        "sns:*",
+        "sqs:*",
+        "ssm:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "DeliberatelyBroadDemoPolicy"
+    }
+  ],
+  "Version": "2012-10-17"
+}

@@ -8,7 +8,7 @@ import (
 )
 
 func TestAddKeepActionsEditsOneLine(t *testing.T) {
-	src, err := os.ReadFile("../../autopilot.yaml")
+	src, err := os.ReadFile("../../testdata/day1/autopilot.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}

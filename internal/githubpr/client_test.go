@@ -20,7 +20,7 @@ const (
 
 func repoFiles(t *testing.T) map[string]string {
 	t.Helper()
-	cfg, err := os.ReadFile("../../autopilot.yaml")
+	cfg, err := os.ReadFile("../../testdata/day1/autopilot.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
