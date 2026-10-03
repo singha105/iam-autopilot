@@ -1,6 +1,6 @@
 # Architecture decision records
 
-Each entry: context, decision, consequences. Day 6 fills in the full set.
+Each entry: context, decision, consequences. Every decision below was exercised in a real run; the evidence is in [docs/results.md](docs/results.md) and [PROGRESS.md](PROGRESS.md).
 
 | # | Decision | Status |
 |---|----------|--------|
@@ -12,13 +12,15 @@ Each entry: context, decision, consequences. Day 6 fills in the full set.
 | [ADR-006](#adr-006-one-managed-policy-per-role-changed-through-policy-versions) | One managed policy per role, changed through policy versions | Accepted (Day 5) |
 | [ADR-007](#adr-007-github-actions-approves-through-oidc-scoped-to-this-repos-pull_request-events) | GitHub Actions approves through OIDC, scoped to this repo's pull_request events | Accepted (Day 5) |
 | [ADR-008](#adr-008-two-breakage-signals-cloudtrail-accessdenied-and-the-lambda-errors-metric) | Two breakage signals: CloudTrail AccessDenied and the Lambda Errors metric | Accepted (Day 5) |
+| [ADR-009](#adr-009-event-history-instead-of-a-trail-and-athena) | Event history instead of a trail and Athena (cost, and the scale-up path) | Accepted (Day 6) |
+| [ADR-010](#adr-010-permissions-boundary-on-the-demo-roles) | Permissions boundary on the demo roles (safe to run in a real account) | Accepted (Day 6) |
 
 ---
 
 ## ADR-001: Standard library `flag` package for the CLI
 
-**Context.** `cmd/autopilot` needs subcommands: `observe` today, then `generate`, `shadow`,
-`propose` and `report`. Each takes a handful of flags (`--role`, `--days`, `--region`, `--out`).
+**Context.** `cmd/autopilot` needs subcommands: `observe`, `generate`, `shadow`,
+`propose`, `cancel`, `status` and `report`. Each takes a handful of flags (`--role`, `--days`, `--region`, `--out`).
 The two realistic choices are the standard library `flag` package with one `flag.FlagSet`
 per subcommand, or `spf13/cobra`.
 
@@ -118,7 +120,7 @@ Three things cover that case:
 - the keep-list (`keepActions`);
 - the post-apply watch, which rolls back on the first `AccessDenied`.
 
-That sequence is the same one Day 6 demonstrates for the quarter-end job. The real fix
+That sequence is exactly what scenario C showed for the quarter-end job. The real fix
 would be data events on a paid trail. The documented scale-up path is a trail plus
 Athena, which also removes the need for this heuristic.
 
@@ -160,7 +162,7 @@ SCPs, the permissions boundary, resource policies and the role's other attached 
 (`AWSLambdaBasicExecutionRole`). That is why platform-only actions (ADR-002) are skipped
 in the test set, and listed in the report, instead of being reported as denials. Shadow
 mode proves the past calls are still allowed; it cannot predict future rare calls. The
-post-apply watch and automatic rollback (Days 4-6) cover those.
+post-apply watch and automatic rollback (ADR-008) cover those.
 
 ---
 
@@ -181,9 +183,9 @@ findings and what happens on merge. Merging it is the only way a rollout moves p
 - *Why:* the reviewer gets a real diff of the policy file, GitHub records who merged and
   when, branch protection and CODEOWNERS work unchanged, and `main` always shows the
   policy that is (or is about to be) live. No custom approval UI, no extra service.
-- *Consequences:* until Day 5 wires merge to enforcement, a merge would change `main`
-  without changing AWS. So Day 4's real PR (#1) was closed without merging and its
-  record marked CANCELLED. Status changes use a DynamoDB condition on the current status,
+- *Consequences:* on Day 4, before merge was wired to enforcement, a merge would have
+  changed `main` without changing AWS, so that first real PR (#1) was closed unmerged and
+  its record marked CANCELLED. Since Day 5 a merge resumes the waiting rollout (ADR-007). Status changes use a DynamoDB condition on the current status,
   so a cancel and an approval cannot both win.
 
 **Decision 2: the token is an SSM Parameter Store SecureString.** `/iamap/github/token`
@@ -199,6 +201,10 @@ parameter with decryption; it never prints it.
   read/write. Issues covers the `autopilot` label. Day 4 hit both failure modes: a 401
   from an invalid token and a 403 from a token missing Contents write. Each time the
   rollout record moved to FAILED and was not left active.
+- *Account ID:* everything the autopilot writes to GitHub (policy files, PR text,
+  comments) carries `${account_id}` instead of the real ID; Terraform renders the files
+  with `templatefile`. Added on Day 6 after the generated policies put real ARNs on `main`;
+  earlier PR diffs and git history still show it and were not rewritten.
 - *Consequences:* no automatic rotation (Secrets Manager's main extra). Rotation is a
   manual `put-parameter --overwrite`, acceptable for a one-repo demo token with an
   expiry date.
@@ -314,3 +320,49 @@ The metric catches breakage early; CloudTrail explains it and feeds the keep-lis
 - A denied *data-plane* call (DynamoDB `GetItem`, S3 `GetObject`) is a data event, so
   event history never shows it, denied or not. Only the `Errors` metric notices it, which
   is a third reason for two signals. In that case the rollback cannot name the action.
+
+---
+
+## ADR-009: Event history instead of a trail and Athena
+
+**Context.** The autopilot needs to know which API calls a role made. The standard answer is
+a CloudTrail trail delivering to S3 and queried with Athena. That costs storage, Athena
+scans and, for data events, $0.10 per 100,000 events, and a second trail costs $2 per
+100,000 management events.
+
+**Decision.** Use CloudTrail **event history** (`LookupEvents`): 90 days of management
+events, always on, free. The observer pages it at 1.5 requests/second to stay under the
+2/second limit.
+
+**Consequences.** $0, and enough for a handful of roles. The costs are real limits:
+- 90 days of memory;
+- one region;
+- slow paging at scale;
+- no data events, which created the blind spot handled by rule R4 (ADR-003).
+
+The scale-up path keeps the rest of the system unchanged: an organization trail to S3 with
+Athena replaces `observe`'s event source, and the unused-access analyzer adds per-action
+last-used data. Only the observer would change.
+
+---
+
+## ADR-010: Permissions boundary on the demo roles
+
+**Context.** The demo runs in a real AWS account that holds other work. Its policies are
+deliberately broad (`s3:*`, `ssm:*`, `ec2:*`) so the autopilot has something to shrink.
+A bug in a demo app, or in the autopilot, must not be able to touch anything else.
+
+**Decision.** Every demo role carries the permissions boundary `iamap-demo-boundary`. It
+allows only:
+- read-style calls (`Describe*`, `List*`, `Get*`);
+- SSM parameters under `/iamap/demo/*`;
+- the one demo DynamoDB table;
+- Lambda logging.
+
+The autopilot changes only policies under `/iamap/managed/` on roles tagged
+`autopilot:managed=true`. Its own worker role can write policy versions only there.
+
+**Consequences.** The broad policies look dangerous but cannot act outside the demo. The
+simulator ignores boundaries (ADR-004), so shadow mode tests the policy alone, which is the
+stricter test. A real deployment would drop the demo boundary and keep the path and tag
+scoping.
