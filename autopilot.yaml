@@ -26,7 +26,7 @@ roles:
   - name: iamap-demo-quarterly-role
     policyFile: policies/demo/quarterly.json
     observationDays: 1
-    keepActions: []
+    keepActions: [ssm:GetParametersByPath]
 
 # Actions never removed from any role, whatever the usage data says.
 neverRemove: []
