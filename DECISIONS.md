@@ -142,9 +142,12 @@ its observed resources. Testing it on `*` too demanded more than the role ever u
 Access Advisor caught up on Day 4, that made correctly scoped `ssm:GetParameter` and
 `dynamodb:DescribeTable` look like would-be denials. It sends one
 request per resource with up to 50 actions, at 5 requests/second. Any result other than
-`allowed` is a would-be denial and fails `autopilot shadow`. The same test set is also
-simulated against the *current* policy; a denial there means the test set is wrong, not
-the proposal. Validation uses Access Analyzer `ValidatePolicy`, which is free (syntax,
+`allowed` is a would-be denial. The same test set is also simulated against the *current*
+policy, and only **regressions** fail: calls the current policy allows and the proposal
+denies. A call both policies deny says the test set (or the simulator) is wrong for that
+call. It becomes a warning in the PR instead of a failure. On Day 6 the simulator returned
+`implicitDeny` for `ssm:GetParametersByPath` on a trailing-slash path ARN even under
+`ssm:*`, while live IAM allowed the call. Validation uses Access Analyzer `ValidatePolicy`, which is free (syntax,
 security warnings, suggestions). No analyzer is created and no custom check is ever called.
 
 **Why.** The project's hard rule is $0 (CLAUDE.md), and the simulator answers the exact

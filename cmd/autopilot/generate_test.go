@@ -55,14 +55,17 @@ func (s stubAnalyzer) ValidatePolicy(context.Context, *accessanalyzer.ValidatePo
 	return &accessanalyzer.ValidatePolicyOutput{Findings: s.findings}, nil
 }
 
-// stubSimulator allows everything except the actions in deny.
+// stubSimulator allows everything, except that the actions in deny are
+// denied by any policy without the "ssm:*" wildcard: a regression, since the
+// current demo policy grants ssm:* and the proposal does not.
 type stubSimulator struct{ deny map[string]bool }
 
 func (s stubSimulator) SimulateCustomPolicy(_ context.Context, in *iam.SimulateCustomPolicyInput, _ ...func(*iam.Options)) (*iam.SimulateCustomPolicyOutput, error) {
 	out := &iam.SimulateCustomPolicyOutput{}
+	broad := strings.Contains(in.PolicyInputList[0], `"ssm:*"`)
 	for _, a := range in.ActionNames {
 		d := iamtypes.PolicyEvaluationDecisionTypeAllowed
-		if s.deny[a] {
+		if s.deny[a] && !broad {
 			d = iamtypes.PolicyEvaluationDecisionTypeImplicitDeny
 		}
 		out.EvaluationResults = append(out.EvaluationResults, iamtypes.EvaluationResult{EvalActionName: aws.String(a), EvalDecision: d})

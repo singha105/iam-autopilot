@@ -231,3 +231,34 @@ func TestTrackedActionsThatWereObservedAreNotTestedOnStar(t *testing.T) {
 		t.Errorf("scoped proposal: tested %d, denied %+v", rep.Tested, rep.Denied)
 	}
 }
+
+// Regression for the Day 6 quarterly rollout: the simulator denied
+// ssm:GetParametersByPath on a trailing-slash path ARN under BOTH the proposal
+// and the current ssm:* policy. That is not a regression and must not fail
+// shadow mode; a call only the proposal denies still must.
+func TestSelfTestCountsOnlyRegressions(t *testing.T) {
+	pathARN := "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly/"
+	p := profile()
+	p.ObservedCalls = append(p.ObservedCalls, observe.ObservedCall{Action: "ssm:GetParametersByPath", Resource: pathARN})
+	f := &fakeSimulator{force: map[string]string{"ssm:GetParametersByPath": "implicitDeny"}} // simulator quirk, any policy
+	current := proposal(t, `{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["ssm:*","dynamodb:*","s3:*","ec2:*"],"Resource":"*"}]}`)
+	withKeep := strings.Replace(goodProposal, `"ssm:GetParameter"]`, `"ssm:GetParameter","ssm:GetParametersByPath"]`, 1)
+
+	rep, err := replayer(f).ReplayWithSelfTest(context.Background(), proposal(t, withKeep), current, p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rep.Denied) != 0 || rep.Allowed != rep.Tested || len(rep.Warnings) != 1 || !strings.Contains(rep.Warnings[0], "not counted against the proposal") {
+		t.Errorf("both-denied call counted: %+v", rep)
+	}
+
+	// A real regression (only the proposal lacks ssm:GetParameter) still fails.
+	gap := strings.Replace(withKeep, `"ssm:GetParameter",`, ``, 1)
+	rep, err = replayer(f).ReplayWithSelfTest(context.Background(), proposal(t, gap), current, p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rep.Denied) != 1 || rep.Denied[0].Action != "ssm:GetParameter" {
+		t.Errorf("regression not reported: %+v", rep.Denied)
+	}
+}

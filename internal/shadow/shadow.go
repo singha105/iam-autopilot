@@ -139,8 +139,13 @@ func (r *Replayer) Replay(ctx context.Context, proposed policy.Document, p obser
 }
 
 // ReplayWithSelfTest also replays the same test set against the CURRENT
-// policy. If the current policy denies something, the test set is wrong (not
-// the proposal), so that is reported as a warning.
+// policy and counts only regressions: calls the current policy allows and
+// the proposal denies. A call the current policy denies too cannot show the
+// proposal breaking anything; it means the test set (or the simulator) is
+// wrong for that call. It is moved out of Denied into a warning, which the PR
+// body shows. Seen on Day 6: the simulator returns implicitDeny for
+// ssm:GetParametersByPath on a path ARN with a trailing slash even under
+// ssm:* on "*", while live IAM allows the same call.
 func (r *Replayer) ReplayWithSelfTest(ctx context.Context, proposed, current policy.Document, p observe.Profile) (Report, error) {
 	rep, err := r.Replay(ctx, proposed, p)
 	if err != nil {
@@ -151,9 +156,19 @@ func (r *Replayer) ReplayWithSelfTest(ctx context.Context, proposed, current pol
 	if err != nil {
 		return rep, fmt.Errorf("self-test of the current policy: %w", err)
 	}
+	both := map[Call]bool{}
 	for _, d := range selfDenied {
-		rep.Warnings = append(rep.Warnings, fmt.Sprintf("self-test: the CURRENT policy also denies %s on %s (%s); the test set is wrong, not the proposal", d.Action, d.Resource, d.Decision))
+		both[Call{Action: d.Action, Resource: d.Resource}] = true
+		rep.Warnings = append(rep.Warnings, fmt.Sprintf("self-test: the CURRENT policy also denies %s on %s (%s), so this call is not counted against the proposal; the test set or the simulator is wrong for it", d.Action, d.Resource, d.Decision))
 	}
+	regressions := []Denial{}
+	for _, d := range rep.Denied {
+		if !both[Call{Action: d.Action, Resource: d.Resource}] {
+			regressions = append(regressions, d)
+		}
+	}
+	rep.Allowed += len(rep.Denied) - len(regressions)
+	rep.Denied = regressions
 	return rep, nil
 }
 
