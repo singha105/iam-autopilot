@@ -331,3 +331,27 @@ func TestGitHubToken(t *testing.T) {
 		t.Errorf("missing token: err = %v", err)
 	}
 }
+
+func TestReport(t *testing.T) {
+	all := []store.Rollout{
+		{RolloutID: "r-2", RoleName: "role-a", Status: store.StatusEnforced, PRNumber: 2, PRURL: "https://github.com/o/r/pull/2",
+			PrevVersionID: "v1", NewVersionID: "v2", EnforcedAt: "2026-10-02T10:00:00Z",
+			Metrics: store.Metrics{GrantedBefore: 1273, GrantedAfter: 5, RemovedPercent: 99.6, ShadowTested: 5}},
+		{RolloutID: "r-1", RoleName: "role-b", Status: store.StatusRolledBack, PRNumber: 3,
+			Metrics: store.Metrics{GrantedBefore: 532, GrantedAfter: 1, RemovedPercent: 99.8, DetectSeconds: 64, RollbackSeconds: 2, DeniedActions: []string{"ssm:GetParametersByPath"}}},
+		{RolloutID: "r-0", RoleName: "role-a", Status: store.StatusFailed},
+	}
+	var short bytes.Buffer
+	writeReport(&short, all, true)
+	lines := strings.Split(strings.TrimSpace(short.String()), "\n")
+	if len(lines) != 4 || !strings.Contains(lines[1], "ENFORCED") || !strings.Contains(lines[1], "#2") || !strings.Contains(lines[1], "99.6% (1273 -> 5)") || !strings.Contains(lines[3], "FAILED") {
+		t.Errorf("short report:\n%s", short.String())
+	}
+	var long bytes.Buffer
+	writeReport(&long, all, false)
+	for _, want := range []string{"versions       v1 -> v2", "timings        detect 64 s, rollback 2 s", "denied         ssm:GetParametersByPath", "shadow         5 replayed, 0 denied"} {
+		if !strings.Contains(long.String(), want) {
+			t.Errorf("long report lacks %q:\n%s", want, long.String())
+		}
+	}
+}

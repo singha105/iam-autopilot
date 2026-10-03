@@ -28,6 +28,7 @@ Commands:
              (--dry-run prints the PR body and writes nothing)
   cancel     Close a rollout's PR without merging and mark it CANCELLED
   status     List rollouts, or show one (--rollout <id>)
+  report     Rollout report (--short: id, role, status, PR, removed %)
 
 Run "autopilot <command> -h" for a command's flags.
 `
@@ -59,6 +60,8 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		err = runCancel(ctx, args[1:], stdout, stderr)
 	case "status":
 		err = runStatus(ctx, args[1:], stdout, stderr)
+	case "report":
+		err = runReport(ctx, args[1:], stdout, stderr)
 	case "help", "-h", "-help", "--help":
 		fmt.Fprint(stdout, usage)
 		return 0

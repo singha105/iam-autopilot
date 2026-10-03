@@ -11,7 +11,7 @@ CMDS       := $(notdir $(wildcard cmd/*))
 # change the zip hash and make Terraform redeploy every function.
 GOFLAGS_LAMBDA := -trimpath -buildvcs=false -tags lambda.norpc -ldflags "-s -w"
 
-.PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help catalog
+.PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help catalog rollout status
 
 all: check
 
@@ -28,6 +28,8 @@ help:
 	@echo "cost-audit   fail if any forbidden resource type exists"
 	@echo "destroy      terraform destroy (interactive)"
 	@echo "catalog      re-download the IAM action catalog into internal/catalog/data/actions.json"
+	@echo "rollout      start a rollout: make rollout ROLE=<roleName>"
+	@echo "status       list rollouts (autopilot report --short)"
 
 build: $(addprefix $(BUILD_DIR)/,$(addsuffix /bootstrap,$(CMDS)))
 
@@ -73,6 +75,20 @@ cost-audit:
 
 destroy:
 	terraform -chdir=$(TF_DIR) destroy
+
+# Start one rollout of the state machine. ROLE is validated before it goes
+# into the JSON input.
+rollout:
+	@[[ "$(ROLE)" =~ ^[A-Za-z0-9+=,.@_-]+$$ ]] || { echo "usage: make rollout ROLE=<roleName>"; exit 1; }
+	@sm=$$(terraform -chdir=$(TF_DIR) output -raw state_machine_arn) && \
+	region=$${AWS_REGION:-us-east-1} && \
+	exec=$$(aws stepfunctions start-execution --region "$$region" --state-machine-arn "$$sm" \
+	  --input "$$(jq -cn --arg r '$(ROLE)' '{roleName: $$r}')" --query executionArn --output text) && \
+	echo "execution: $$exec" && \
+	echo "console:   https://$$region.console.aws.amazon.com/states/home?region=$$region#/v2/executions/details/$$exec"
+
+status:
+	@go run ./cmd/autopilot report --short
 
 catalog:
 	go run ./internal/catalog/gen -out internal/catalog/data/actions.json
