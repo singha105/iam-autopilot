@@ -170,7 +170,7 @@ func TestCollectClassifiesDenials(t *testing.T) {
 	wantDenied := []DeniedCall{
 		{Action: "ec2:DescribeInstances", Resource: "*", ErrorCode: "Client.UnauthorizedOperation", Time: at},
 		{Action: "sns:Publish", Resource: "*", ErrorCode: "AuthorizationError", Time: at},
-		{Action: "ssm:GetParametersByPath", Resource: "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly", ErrorCode: "AccessDenied", Time: at},
+		{Action: "ssm:GetParametersByPath", Resource: "arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly/", ErrorCode: "AccessDenied", Time: at},
 	}
 	if !reflect.DeepEqual(denied, wantDenied) {
 		t.Errorf("denied =\n%+v\nwant\n%+v", denied, wantDenied)

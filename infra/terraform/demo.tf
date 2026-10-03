@@ -124,7 +124,9 @@ resource "aws_iam_policy" "demo" {
   name        = "iamap-demo-${each.key}-policy"
   path        = "/iamap/managed/"
   description = "Deliberately over-broad demo policy for iamap-${each.value.cmd}; managed by the autopilot through policy versions."
-  policy      = file("${local.policy_dir}/${each.key}.json")
+  # The files carry ${account_id} instead of the real ID, so the public repo
+  # never shows it (see githubpr.AccountPlaceholder).
+  policy = templatefile("${local.policy_dir}/${each.key}.json", { account_id = local.account_id })
 }
 
 resource "aws_iam_role_policy_attachment" "demo" {

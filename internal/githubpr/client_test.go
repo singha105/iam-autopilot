@@ -200,3 +200,33 @@ func TestRenderPRBody(t *testing.T) {
 		t.Error("rolloutId marker should close the body")
 	}
 }
+
+func TestAccountIDNeverReachesGitHub(t *testing.T) {
+	const real = "987654321098"
+	f, c := newFakeGitHub(t, repoFiles(t))
+	c.AccountID = real
+	scoped := "{\"Statement\":[{\"Action\":[\"ssm:GetParameter\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:ssm:us-east-1:" + real + ":parameter/x\"]}],\"Version\":\"2012-10-17\"}\n"
+	res, err := c.OpenPolicyPR(context.Background(), PolicyPR{
+		RolloutID: rollout, PolicyFile: policyF, PolicyJSON: []byte(scoped),
+		Title: "tighten arn:aws:iam::" + real + ":role/r", CommitMessage: "m " + real, Body: "policy arn:aws:iam::" + real + ":policy/iamap/managed/p",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := c.CommentOnPR(context.Background(), res.Number, "restored arn:aws:iam::"+real+":policy/p"); err != nil {
+		t.Fatal(err)
+	}
+	pr := f.pulls[res.Number]
+	written := []string{f.branches[res.Branch][policyF], pr.Title, pr.Body, f.commits[0].message, f.comments[res.Number][0]}
+	for _, w := range written {
+		if strings.Contains(w, real) {
+			t.Errorf("account ID reached GitHub: %q", w)
+		}
+		if !strings.Contains(w, AccountPlaceholder) {
+			t.Errorf("placeholder missing: %q", w)
+		}
+	}
+	if want := strings.ReplaceAll(scoped, real, AccountPlaceholder); f.branches[res.Branch][policyF] != want {
+		t.Errorf("policy file = %q", f.branches[res.Branch][policyF])
+	}
+}

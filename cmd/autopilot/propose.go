@@ -72,7 +72,16 @@ var newPRClient = func(ctx context.Context, c awsClients, repo config.GitHub) (p
 	if err != nil {
 		return nil, err
 	}
-	return githubpr.New(token, repo, "")
+	gh, err := githubpr.New(token, repo, "")
+	if err != nil {
+		return nil, err
+	}
+	if c.AccountID != nil {
+		if gh.AccountID, err = c.AccountID(ctx); err != nil {
+			return nil, fmt.Errorf("account ID for redaction: %w", err)
+		}
+	}
+	return gh, nil
 }
 
 // errShadowFailed and errProposalFailed make `propose` exit 1.

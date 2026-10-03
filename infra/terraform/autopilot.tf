@@ -38,6 +38,7 @@ locals {
     GITHUB_BRANCH   = "main"
     CONFIG_PATH     = "autopilot.yaml"
     TOKEN_PARAMETER = local.github_token_parameter
+    ACCOUNT_ID      = local.account_id # replaced by ${account_id} in everything sent to GitHub
   }
 }
 

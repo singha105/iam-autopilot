@@ -42,9 +42,9 @@ func TestExtractResources(t *testing.T) {
 			want: []string{"arn:aws:ssm:us-east-1:123456789012:parameter/a", "arn:aws:ssm:us-east-1:123456789012:parameter/b"},
 		},
 		{
-			name: "ssm GetParametersByPath trims the trailing slash",
+			name: "ssm GetParametersByPath keeps the trailing slash IAM evaluates",
 			ev:   event(t, "ssm.amazonaws.com", "GetParametersByPath", `{"path":"/iamap/demo/quarterly/","recursive":false}`),
-			want: []string{"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly"},
+			want: []string{"arn:aws:ssm:us-east-1:123456789012:parameter/iamap/demo/quarterly/"},
 		},
 		{
 			name: "dynamodb tableName",

@@ -109,13 +109,16 @@ func ssmParameterARN(region, account, name string) string {
 	return fmt.Sprintf("arn:%s:ssm:%s:%s:parameter/%s", partition, region, account, strings.TrimPrefix(name, "/"))
 }
 
-// ssmPathARN builds the resource for GetParametersByPath: the path without
-// its trailing slash, e.g. /iamap/demo/quarterly/ -> parameter/iamap/demo/quarterly.
+// ssmPathARN builds the resource IAM evaluates for GetParametersByPath: the
+// path exactly as requested, trailing slash included. Verified on Day 6: a
+// denial for path "/iamap/demo/quarterly/" names the resource
+// parameter/iamap/demo/quarterly/ (with the slash), so dropping it would
+// scope a proposal to a resource the call never matches.
 func ssmPathARN(region, account, path string) string {
 	if path == "" || region == "" || account == "" {
 		return ""
 	}
-	return fmt.Sprintf("arn:%s:ssm:%s:%s:parameter/%s", partition, region, account, strings.Trim(path, "/"))
+	return fmt.Sprintf("arn:%s:ssm:%s:%s:parameter/%s", partition, region, account, strings.TrimPrefix(path, "/"))
 }
 
 func dynamoTableARN(region, account, table string) string {

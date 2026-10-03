@@ -87,7 +87,12 @@ func newDeps(ctx context.Context, logger *slog.Logger) (*deps, error) {
 		if err != nil {
 			return nil, fmt.Errorf("read %s: %w", tokenParam, err)
 		}
-		return githubpr.New(aws.ToString(out.Parameter.Value), ghRepo, "")
+		c, err := githubpr.New(aws.ToString(out.Parameter.Value), ghRepo, "")
+		if err != nil {
+			return nil, err
+		}
+		c.AccountID = os.Getenv("ACCOUNT_ID") // never written to GitHub
+		return c, nil
 	}
 
 	d := &deps{

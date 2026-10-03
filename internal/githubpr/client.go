@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/go-github/v90/github"
@@ -19,12 +20,30 @@ import (
 // Label marks every PR the autopilot opens.
 const Label = "autopilot"
 
+// AccountPlaceholder replaces the AWS account ID in everything written to
+// GitHub. Terraform renders policy files with templatefile(account_id=...),
+// so the applied policy is unchanged while the public repo never carries the
+// account ID. (Policies must therefore not use IAM policy variables, whose
+// ${...} syntax templatefile would try to interpolate.)
+const AccountPlaceholder = "${account_id}"
+
 // Client opens and inspects autopilot PRs in one repository.
 type Client struct {
 	gh    *github.Client
 	Owner string
 	Repo  string
 	Base  string // branch PRs target, normally main
+	// AccountID, when set, is replaced by AccountPlaceholder in every file,
+	// PR title, PR body and comment the client writes.
+	AccountID string
+}
+
+// scrub is the single point every outgoing text passes through.
+func (c *Client) scrub(s string) string {
+	if c.AccountID == "" {
+		return s
+	}
+	return strings.ReplaceAll(s, c.AccountID, AccountPlaceholder)
 }
 
 // New returns a client authenticated with token. baseURL is empty for
@@ -89,6 +108,7 @@ func (c *Client) branchFromBase(ctx context.Context, branch string) error {
 // commitFile writes content to path on branch, as one commit. An unchanged
 // file is not committed again.
 func (c *Client) commitFile(ctx context.Context, branch, path string, content []byte, message string) error {
+	content, message = []byte(c.scrub(string(content))), c.scrub(message)
 	old, sha, err := c.file(ctx, path, branch)
 	if err != nil {
 		return err
@@ -112,6 +132,7 @@ func (c *Client) commitFile(ctx context.Context, branch, path string, content []
 // openPR creates the PR and adds the autopilot label (creating the label if
 // the repository does not have it yet).
 func (c *Client) openPR(ctx context.Context, branch, title, body string) (Result, error) {
+	title, body = c.scrub(title), c.scrub(body)
 	pr, _, err := c.gh.PullRequests.Create(ctx, c.Owner, c.Repo, github.CreatePullRequest{
 		Title: github.Ptr(title), Head: branch, Base: c.Base, Body: github.Ptr(body),
 	})
@@ -215,7 +236,7 @@ func (c *Client) OpenRevertPR(ctx context.Context, in RevertPR) (Result, error) 
 
 // CommentOnPR adds a markdown comment to a PR.
 func (c *Client) CommentOnPR(ctx context.Context, number int, markdown string) error {
-	if _, _, err := c.gh.Issues.CreateComment(ctx, c.Owner, c.Repo, number, &github.IssueComment{Body: github.Ptr(markdown)}); err != nil {
+	if _, _, err := c.gh.Issues.CreateComment(ctx, c.Owner, c.Repo, number, &github.IssueComment{Body: github.Ptr(c.scrub(markdown))}); err != nil {
 		return fmt.Errorf("comment on PR #%d: %w", number, err)
 	}
 	return nil
