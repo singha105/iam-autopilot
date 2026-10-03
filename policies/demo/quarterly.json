@@ -1,1 +1,25 @@
-{"Statement":[{"Action":["ec2:Describe*","logs:*","sns:*","ssm:*"],"Effect":"Allow","Resource":"*","Sid":"DeliberatelyBroadDemoPolicy"}],"Version":"2012-10-17"}
+{
+  "Statement": [
+    {
+      "Action": [
+        "ssm:GetParametersByPath"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ],
+      "Sid": "Ssm0"
+    },
+    {
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:ssm:us-east-1:${account_id}:parameter/iamap/demo/quarterly/schedule"
+      ],
+      "Sid": "Ssm1"
+    }
+  ],
+  "Version": "2012-10-17"
+}
