@@ -2,17 +2,44 @@
   "Statement": [
     {
       "Action": [
-        "ec2:*",
-        "iam:Get*",
-        "iam:List*",
-        "lambda:*",
-        "s3:*",
-        "sns:*",
-        "sqs:*"
+        "ec2:DescribeInstances",
+        "ec2:DescribeRegions"
       ],
       "Effect": "Allow",
-      "Resource": "*",
-      "Sid": "DeliberatelyBroadDemoPolicy"
+      "Resource": [
+        "*"
+      ],
+      "Sid": "Ec20"
+    },
+    {
+      "Action": [
+        "iam:ListRoles"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ],
+      "Sid": "Iam0"
+    },
+    {
+      "Action": [
+        "lambda:ListFunctions"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ],
+      "Sid": "Lambda0"
+    },
+    {
+      "Action": [
+        "s3:ListAllMyBuckets"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ],
+      "Sid": "S30"
     }
   ],
   "Version": "2012-10-17"
