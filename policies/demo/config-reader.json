@@ -2,15 +2,25 @@
   "Statement": [
     {
       "Action": [
-        "dynamodb:*",
-        "kms:Decrypt",
-        "sns:*",
-        "sqs:*",
-        "ssm:*"
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem"
       ],
       "Effect": "Allow",
-      "Resource": "*",
-      "Sid": "DeliberatelyBroadDemoPolicy"
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:992839645941:table/iamap-demo-config"
+      ],
+      "Sid": "Dynamodb0"
+    },
+    {
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:ssm:us-east-1:992839645941:parameter/iamap/demo/config"
+      ],
+      "Sid": "Ssm0"
     }
   ],
   "Version": "2012-10-17"
