@@ -355,3 +355,48 @@ func TestReport(t *testing.T) {
 		}
 	}
 }
+
+func TestResultsAreComputedFromRecords(t *testing.T) {
+	merged := time.Date(2026, 10, 3, 2, 51, 4, 0, time.UTC)
+	all := []store.Rollout{
+		{RolloutID: "inv-1", RoleName: "iamap-demo-inventory-role", Status: store.StatusEnforced, PRNumber: 2, CreatedAt: "2026-10-03T00:54:46Z", EnforcedAt: "2026-10-03T02:54:34Z",
+			Metrics: store.Metrics{GrantedBefore: 1273, GrantedAfter: 5, RemovedPercent: 99.6, ObservedActions: 5, ShadowTested: 5}},
+		{RolloutID: "q-1", RoleName: "iamap-demo-quarterly-role", Status: store.StatusRolledBack, PRNumber: 4, CreatedAt: "2026-10-03T04:11:50Z", EnforcedAt: "2026-10-03T04:13:18Z", DetectedAt: "x", RolledBackAt: "y",
+			Metrics: store.Metrics{GrantedBefore: 532, GrantedAfter: 1, DetectSeconds: 300.4, RollbackSeconds: 0.87, DeniedActions: []string{"ssm:GetParametersByPath"}}},
+		{RolloutID: "q-0", RoleName: "iamap-demo-quarterly-role", Status: store.StatusRolledBack, CreatedAt: "2026-10-03T03:00:00Z", DetectedAt: "x", RolledBackAt: "y",
+			Metrics: store.Metrics{DetectSeconds: 100, RollbackSeconds: 2}},
+		{RolloutID: "q-2", RoleName: "iamap-demo-quarterly-role", Status: store.StatusEnforced, PRNumber: 6, CreatedAt: "2026-10-03T04:50:00Z",
+			Metrics: store.Metrics{GrantedBefore: 532, GrantedAfter: 2, RemovedPercent: 99.6}},
+		{RolloutID: "q-old", RoleName: "iamap-demo-quarterly-role", Status: store.StatusEnforced, CreatedAt: "2026-10-01T00:00:00Z",
+			Metrics: store.Metrics{GrantedBefore: 999, GrantedAfter: 999}}, // older: must not count
+		{RolloutID: "f", RoleName: "iamap-demo-inventory-role", Status: store.StatusFailed, CreatedAt: "2026-10-02T05:08:27Z"},
+	}
+	tot := computeTotals(all)
+	if tot.RolesTightened != 2 || tot.PermissionsBefore != 1805 || tot.PermissionsAfter != 7 || tot.PermissionsRemoved != 1798 ||
+		tot.RemovedPercent != 99.6 || tot.Rollbacks != 2 || tot.MedianDetectSeconds != 200.2 || tot.MedianRollbackSecs != 1.435 || tot.BreakingLeftInPlace != 0 {
+		t.Errorf("totals = %+v", tot)
+	}
+	md := renderResults(all, map[int]time.Time{2: merged}, time.Date(2026, 10, 3, 6, 0, 0, 0, time.UTC), "https://github.com/singha105/iam-autopilot")
+	for _, want := range []string{
+		"| Roles tightened | 2 |",
+		"| Permissions removed | 1798 (99.6%) |",
+		"| Breaking changes left in place | 0 |",
+		"| inventory | ENFORCED | 1273 → 5 | 99.6% | 5 | 5 / 0 | 210 s (3.5 min) | - | - | [#2](https://github.com/singha105/iam-autopilot/pull/2) |",
+		"| quarterly | ROLLED_BACK | 532 → 1 |",
+		"| 300 s (5.0 min) | 0.9 s | [#4]",
+		"| inventory | FAILED | - | - | - | - | - | - | - | - |",
+	} {
+		if !strings.Contains(md, want) {
+			t.Errorf("results.md lacks %q:\n%s", want, md)
+		}
+	}
+	// Newest first.
+	if strings.Index(md, "[#6]") > strings.Index(md, "[#4]") {
+		t.Error("rows are not newest first")
+	}
+	// An ENFORCED rollout that recorded a denial is a breaking change left in place.
+	all[0].Metrics.DeniedActions = []string{"x"}
+	if computeTotals(all).BreakingLeftInPlace != 1 {
+		t.Error("breaking change not counted")
+	}
+}

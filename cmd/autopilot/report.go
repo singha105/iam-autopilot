@@ -8,18 +8,47 @@ import (
 	"io"
 	"strings"
 	"text/tabwriter"
+	"time"
 
+	"github.com/singha105/iam-autopilot/internal/config"
+	"github.com/singha105/iam-autopilot/internal/githubpr"
 	"github.com/singha105/iam-autopilot/internal/store"
 )
 
+// mergeTimes returns GitHub's merge time for each merged PR; tests replace it.
+var mergeTimes = func(ctx context.Context, c awsClients, repo config.GitHub, prs []int) (map[int]time.Time, error) {
+	token, err := githubToken(ctx, c)
+	if err != nil {
+		return nil, err
+	}
+	gh, err := githubpr.New(token, repo, "")
+	if err != nil {
+		return nil, err
+	}
+	out := map[int]time.Time{}
+	for _, n := range prs {
+		info, err := gh.IsMerged(ctx, n)
+		if err != nil {
+			return nil, err
+		}
+		if info.Merged {
+			out[n] = info.MergedAt
+		}
+	}
+	return out, nil
+}
+
 // runReport lists every rollout. --short prints one line each (id, role,
-// status, PR, removed %); the default adds timings, versions and denials.
+// status, PR, removed %). Without --short it writes docs/results.md (every
+// number computed from the records) and prints the per-rollout details.
 func runReport(ctx context.Context, args []string, stdout, stderr io.Writer) error {
-	var region, table string
+	var region, table, out, configPath string
 	var short bool
 	fs := flag.NewFlagSet("report", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	fs.BoolVar(&short, "short", false, "one line per rollout")
+	fs.StringVar(&out, "out", "docs/results.md", "results file to write (without --short)")
+	fs.StringVar(&configPath, "config", config.DefaultPath, "autopilot config file (for the GitHub repo)")
 	fs.StringVar(&region, "region", "us-east-1", "AWS region")
 	fs.StringVar(&table, "table", store.DefaultTable, "rollouts table")
 	if err := fs.Parse(args); err != nil {
@@ -37,6 +66,30 @@ func runReport(ctx context.Context, args []string, stdout, stderr io.Writer) err
 		return err
 	}
 	writeReport(stdout, all, short)
+	if short {
+		return nil
+	}
+	cfg, err := config.Load(configPath)
+	if err != nil {
+		return err
+	}
+	var prs []int
+	for _, r := range all {
+		if r.PRNumber > 0 && r.EnforcedAt != "" {
+			prs = append(prs, r.PRNumber)
+		}
+	}
+	merged, err := mergeTimes(ctx, clients, cfg.GitHub, prs)
+	if err != nil {
+		return fmt.Errorf("PR merge times: %w", err)
+	}
+	repoURL := fmt.Sprintf("https://github.com/%s/%s", cfg.GitHub.Owner, cfg.GitHub.Repo)
+	if err := writeFile(out, []byte(renderResults(all, merged, now(), repoURL))); err != nil {
+		return err
+	}
+	t := computeTotals(all)
+	fmt.Fprintf(stdout, "\nwrote %s: %d roles tightened, %d -> %d permissions (%.1f%% removed), %d rollback(s), %d breaking change(s) left in place\n",
+		out, t.RolesTightened, t.PermissionsBefore, t.PermissionsAfter, t.RemovedPercent, t.Rollbacks, t.BreakingLeftInPlace)
 	return nil
 }
 
