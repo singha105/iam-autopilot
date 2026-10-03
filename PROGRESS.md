@@ -157,7 +157,9 @@ Read this and CLAUDE.md at the start of every session.
 - [x] Final checks: make check passes; go test passes with AWS credentials unset; terraform plan clean;
       make cost-audit passes; 0 CloudTrail trails; account ID in 0 repo files; no tokens
       (one false positive: the redaction test's fake key); CI green on 6c40e44 (run 37100526306)
-- [ ] Teardown decision: asked, not assumed (running costs $0 either way)
+- [x] Teardown decision: asked; kept running for demos (2026-10-03). To tear down later: `make destroy`
+      (review the plan), then `aws ssm delete-parameter --name /iamap/github/token` and delete the
+      fine-grained GitHub token
 
 ## Facts recorded
 
