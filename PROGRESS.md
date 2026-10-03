@@ -130,17 +130,34 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Day 6: Scenarios, results and the case study (2026-10-03)
 
-- [ ] Run `make traffic` first
+- [x] Run `make traffic` first (15/15 OK)
 - [x] Generator records every rule that kept an action (R2,R5,R6), so the keep-list shows in PRs;
       `make quarter-end`; worker redeployed (plan reviewed)
-- [ ] Scenario B (config-reader, blind spot): PR shows GetItem/PutItem kept-unobservable on the table;
-      traffic green during the watch; Done, ENFORCED
-- [ ] Scenario C (quarterly): first rollout rolls back automatically after a quarter-end run is denied;
-      revert PR adds ssm:GetParametersByPath to keepActions; second rollout keeps it (R6) and ends Done
-- [ ] `autopilot report` writes docs/results.md from the records
-- [ ] README as a case study; DECISIONS.md ADR-001..010 (the prompt's ADR-008/009 become 009/010)
-- [ ] Final checks: make check, offline tests, cost audit, no trail, no account ID or tokens, resource table
-- [ ] Teardown decision (asked, not assumed)
+- [x] Scenario B (config-reader, blind spot): PR #3 showed GetItem/PutItem kept-unobservable on the
+      iamap-demo-config table; traffic during the watch 15/15 twice (itemFound/written true);
+      Done after 35 transitions, 9 clean watches; record ENFORCED (v1 -> v2)
+- [x] Scenario C (quarterly), run in parallel with B:
+      - C1: PR #4 removed ssm:GetParametersByPath; merged; quarter-end 2 min into the watch was denied;
+        the first watch saw both signals (CloudTrail denial + Lambda Errors = 1), restored v1 in 0.87 s,
+        execution ended red (RolledBack), PR #4 got the rollback comment, revert PR #5 restored the old
+        file and added ssm:GetParametersByPath to keepActions; quarter-end succeeded right after
+      - C2 first attempt: ShadowFailed because the simulator denies GetParametersByPath on a
+        trailing-slash path ARN even under ssm:*; the self-test flagged it. Fixed with approval: shadow
+        counts only regressions (ADR-004)
+      - C2: PR #6 kept ssm:GetParametersByPath (R2,R6); merged; quarter-end succeeded during the watch
+        under v3; Done after 35 transitions; record ENFORCED
+- [x] Account ID kept out of GitHub (approved): every GitHub write is scrubbed to ${account_id};
+      policy files are rendered by Terraform templatefile; plan showed no change to any demo policy
+- [x] SSM path ARNs keep their trailing slash (the Day 6 denial named parameter/iamap/demo/quarterly/)
+- [x] `autopilot report` writes docs/results.md from the records: 3 roles, 2110 -> 11 permissions
+      (99.5% removed), 1 rollback (detect 300 s, roll back 0.9 s), 0 breaking changes left in place
+- [x] README rewritten as a case study (results copied by script from docs/results.md; resource table
+      from the tagging API); docs/demo.cast recorded with asciinema (account ID redacted)
+- [x] DECISIONS.md ADR-001..010 consistent (the prompt's ADR-008/009 are ADR-009/010)
+- [x] Final checks: make check passes; go test passes with AWS credentials unset; terraform plan clean;
+      make cost-audit passes; 0 CloudTrail trails; account ID in 0 repo files; no tokens
+      (one false positive: the redaction test's fake key); CI green on 6c40e44 (run 37100526306)
+- [ ] Teardown decision: asked, not assumed (running costs $0 either way)
 
 ## Facts recorded
 
@@ -154,6 +171,15 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Findings for later days
 
+- **Simulator quirk (Day 6).** iam:SimulateCustomPolicy returns implicitDeny for ssm:GetParametersByPath
+  on a trailing-slash path ARN even under ssm:* on *, while live IAM allows the call. Shadow mode now
+  fails only on regressions, so such calls become warnings.
+- **Account ID in history (Day 6).** PR #3/#4 diffs and git history before 1fcb88b contain the account
+  ID in policy ARNs; from 1fcb88b on, everything written to GitHub uses ${account_id}. History was not
+  rewritten.
+- **Check a PR's CI before merging (Day 5 lesson, applied on Day 6):** every Day 6 merge waited for
+  green checks.
+
 - **States task actions have no resource types (Day 5).** states:SendTaskSuccess/SendTaskFailure can
   only be granted on "*"; the brief's state-machine ARN would have denied every approval. Checked
   against the Service Authorization Reference before writing the role.
@@ -161,9 +187,6 @@ Read this and CLAUDE.md at the start of every session.
   shows use_immutable_subject=true; trust `sub` must be repo:singha105@173531525/iam-autopilot@1396239326:pull_request.
 - **Merged PRs add commits to main (Day 5).** Merging PR #2 put its commit and a merge commit on main
   (not counted in the day's commit budget). Run `git pull` before `terraform plan` after a rollout.
-- **Day 6 setup:** quarterly's rollout will remove ssm:GetParametersByPath; invoking quarterly with
-  {"mode":"quarter-end"} during the watch should be denied -> Rollback -> revert PR adding it to
-  keepActions. The rollouts table now has 1 ENFORCED, 1 CANCELLED and 2 FAILED inventory records.
 
 - **Day 5 approver:** `autopilot status` shows the rollout; the PR body ends with
   `<!-- rolloutId: ... -->` and the record holds prNumber/prBranch, so the approve workflow can map a
@@ -218,4 +241,6 @@ Read this and CLAUDE.md at the start of every session.
 
 ## Next
 
-- Day 6: run `aws login --profile paved` and `make traffic`, then paste the Day 6 prompt.
+- All six days are done. Open choices: tear down (`make destroy`, then delete the SSM token
+  parameter and the GitHub token) or keep it running for demos ($0 either way); add the Billing
+  screenshot to the README placeholder.
