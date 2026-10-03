@@ -276,6 +276,20 @@ func TestRules(t *testing.T) {
 			wantKept: map[string]string{"ssm:GetParameter": paramARN, "ssm:GetParametersByPath": "*", "ssm:PutParameter": paramARN},
 		},
 		{
+			name:     "R6 is recorded even when the action was also observed",
+			current:  allow("ssm:*"),
+			profile:  prof([]observe.ObservedCall{call("ssm:GetParameter", paramARN), call("ssm:GetParametersByPath", paramARN)}, []string{"ssm"}, nil),
+			config:   cfg(config.KeepEntry{Action: "ssm:GetParametersByPath", Resource: paramARN}),
+			wantKept: map[string]string{"ssm:GetParameter": paramARN, "ssm:GetParametersByPath": paramARN},
+			check: func(t *testing.T, r Result) {
+				for _, k := range r.Summary.Kept {
+					if k.Action == "ssm:GetParametersByPath" && k.Rule != "R2,R5,R6" {
+						t.Errorf("rule = %q, want R2,R5,R6", k.Rule)
+					}
+				}
+			},
+		},
+		{
 			name:     "R7 drops actions the current policy does not grant",
 			current:  allow("ssm:*"),
 			profile:  prof([]observe.ObservedCall{call("ssm:GetParameter", paramARN)}, []string{"ssm", "logs"}, map[string][]string{"logs": {"logs:CreateLogStream"}}),

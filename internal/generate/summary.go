@@ -95,7 +95,7 @@ func buildSummary(role string, before, after []string, actions []KeptAction, unc
 		s.Services = append(s.Services, ServiceSummary{Service: svc, Before: b[svc], After: a[svc], Rule: rule})
 	}
 	for _, k := range actions {
-		if strings.HasPrefix(k.Rule, RuleBlindSpot) {
+		if strings.Contains(","+k.Rule+",", ","+RuleBlindSpot+",") {
 			s.KeptUnobservable = append(s.KeptUnobservable, k)
 		}
 	}

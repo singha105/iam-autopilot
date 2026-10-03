@@ -69,7 +69,7 @@ func generateFromFixtures(t *testing.T, role string) Result {
 	if err := json.Unmarshal(raw, &prof); err != nil {
 		t.Fatal(err)
 	}
-	cfg, err := config.Load("../../autopilot.yaml")
+	cfg, err := config.Load("../../testdata/day1/autopilot.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}

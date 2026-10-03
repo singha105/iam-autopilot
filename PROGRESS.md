@@ -126,11 +126,21 @@ Read this and CLAUDE.md at the start of every session.
 - [x] ADR-006 (policy versions), ADR-007 (OIDC approval, immutable subject, environment trade-off),
       ADR-008 (two breakage signals). The prompt calls them ADR-005..007; ADR-005 was used on Day 4.
 - [x] `make check` passes; pushed
-- [ ] CI green on GitHub for the Day 5 head (checked right after the push; tick in Day 6's first commit)
+- [x] CI green on GitHub for the Day 5 head (run 37094127682, both jobs passed)
 
-## Day 6
+## Day 6: Scenarios, results and the case study (2026-10-03)
 
-- [ ] (Day 6 prompt)
+- [ ] Run `make traffic` first
+- [x] Generator records every rule that kept an action (R2,R5,R6), so the keep-list shows in PRs;
+      `make quarter-end`; worker redeployed (plan reviewed)
+- [ ] Scenario B (config-reader, blind spot): PR shows GetItem/PutItem kept-unobservable on the table;
+      traffic green during the watch; Done, ENFORCED
+- [ ] Scenario C (quarterly): first rollout rolls back automatically after a quarter-end run is denied;
+      revert PR adds ssm:GetParametersByPath to keepActions; second rollout keeps it (R6) and ends Done
+- [ ] `autopilot report` writes docs/results.md from the records
+- [ ] README as a case study; DECISIONS.md ADR-001..010 (the prompt's ADR-008/009 become 009/010)
+- [ ] Final checks: make check, offline tests, cost audit, no trail, no account ID or tokens, resource table
+- [ ] Teardown decision (asked, not assumed)
 
 ## Facts recorded
 

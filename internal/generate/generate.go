@@ -32,7 +32,7 @@ type Result struct {
 
 // kept is one action the proposal keeps.
 type kept struct {
-	rule         string
+	rules        map[string]bool // every rule that kept the action (R2 and R6, say)
 	resources    map[string]bool
 	unobservable bool
 }
@@ -242,9 +242,10 @@ func (g *generator) add(action, rule string, unobservable bool, resources ...str
 	a := g.canonical(action)
 	k, ok := g.kept[a]
 	if !ok {
-		k = &kept{rule: rule, resources: map[string]bool{}, unobservable: unobservable}
+		k = &kept{rules: map[string]bool{}, resources: map[string]bool{}, unobservable: unobservable}
 		g.kept[a] = k
 	}
+	k.rules[rule] = true
 	for _, r := range resources {
 		k.resources[r] = true
 	}
@@ -287,14 +288,14 @@ func (g *generator) finalize() []KeptAction {
 		k := g.kept[a]
 		covering := g.coveringStatements(a)
 		if len(covering) == 0 {
-			g.warnf("R7: dropped %s (kept by %s): the current policy does not grant it; it probably comes from another attached policy such as AWSLambdaBasicExecutionRole", a, k.rule)
+			g.warnf("R7: dropped %s (kept by %s): the current policy does not grant it; it probably comes from another attached policy such as AWSLambdaBasicExecutionRole", a, strings.Join(sortedKeys(k.rules), ","))
 			continue
 		}
-		rule := k.rule
 		res := g.scope(a, k.resources)
-		if rule != RuleBlindSpot && !(len(res) == 1 && res[0] == "*") && g.cat.SupportsResources(a) {
-			rule += "," + RuleScoped
+		if !k.rules[RuleBlindSpot] && !(len(res) == 1 && res[0] == "*") && g.cat.SupportsResources(a) {
+			k.rules[RuleScoped] = true
 		}
+		rule := strings.Join(sortedKeys(k.rules), ",")
 		res = g.neverBroaden(a, res, covering)
 		out = append(out, KeptAction{Action: a, Resources: res, Rule: rule})
 	}

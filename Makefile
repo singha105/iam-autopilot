@@ -11,7 +11,7 @@ CMDS       := $(notdir $(wildcard cmd/*))
 # change the zip hash and make Terraform redeploy every function.
 GOFLAGS_LAMBDA := -trimpath -buildvcs=false -tags lambda.norpc -ldflags "-s -w"
 
-.PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help catalog rollout status
+.PHONY: all build test lint tf-fmt tf-validate check plan apply traffic cost-audit destroy clean help catalog rollout status quarter-end
 
 all: check
 
@@ -30,6 +30,7 @@ help:
 	@echo "catalog      re-download the IAM action catalog into internal/catalog/data/actions.json"
 	@echo "rollout      start a rollout: make rollout ROLE=<roleName>"
 	@echo "status       list rollouts (autopilot report --short)"
+	@echo "quarter-end  invoke iamap-demo-quarterly in its rare quarter-end mode (the Day 6 rollback demo)"
 
 build: $(addprefix $(BUILD_DIR)/,$(addsuffix /bootstrap,$(CMDS)))
 
@@ -89,6 +90,16 @@ rollout:
 
 status:
 	@go run ./cmd/autopilot report --short
+
+# The rare code path: ssm:GetParametersByPath. Fails (exit 1) if the function
+# returns an error, which is what a tightened policy should cause.
+quarter-end:
+	@out=$$(mktemp) && \
+	err=$$(aws lambda invoke --region $${AWS_REGION:-us-east-1} --function-name iamap-demo-quarterly \
+	  --cli-binary-format raw-in-base64-out --payload '{"mode":"quarter-end"}' "$$out" \
+	  --query FunctionError --output text) && \
+	echo "$$(date -u +%H:%M:%SZ) quarter-end: $$(cat $$out)"; rm -f "$$out"; \
+	if [ "$$err" != "None" ]; then echo "quarter-end FAILED ($$err)"; exit 1; fi
 
 catalog:
 	go run ./internal/catalog/gen -out internal/catalog/data/actions.json
