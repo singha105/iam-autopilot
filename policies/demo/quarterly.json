@@ -2,14 +2,13 @@
   "Statement": [
     {
       "Action": [
-        "ec2:Describe*",
-        "logs:*",
-        "sns:*",
-        "ssm:*"
+        "ssm:GetParameter"
       ],
       "Effect": "Allow",
-      "Resource": "*",
-      "Sid": "DeliberatelyBroadDemoPolicy"
+      "Resource": [
+        "arn:aws:ssm:us-east-1:992839645941:parameter/iamap/demo/quarterly/schedule"
+      ],
+      "Sid": "Ssm0"
     }
   ],
   "Version": "2012-10-17"
