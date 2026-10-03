@@ -1,0 +1,58 @@
+name: Approve rollout
+
+# A merged autopilot PR is the approval (ADR-005). When an autopilot/ PR into
+# main closes, this job assumes iamap-github-approver through OIDC (no AWS keys
+# in GitHub; ADR-007) and calls the approver Lambda, which checks with GitHub
+# whether the PR was really merged and resumes or cancels the rollout.
+# autopilot-revert/ branches are ignored: a revert only fixes main.
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: approve-${{ github.event.pull_request.head.ref }}
+  cancel-in-progress: false
+
+jobs:
+  approve:
+    if: startsWith(github.event.pull_request.head.ref, 'autopilot/')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC token for sts:AssumeRoleWithWebIdentity
+      contents: read
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.IAMAP_APPROVER_ROLE_ARN }}
+          aws-region: us-east-1
+          role-session-name: approve-pr-${{ github.event.pull_request.number }}
+
+      - name: Invoke the approver
+        env:
+          # Untrusted values go through env, never straight into the script.
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          MERGED: ${{ github.event.pull_request.merged }}
+        run: |
+          set -euo pipefail
+          rollout_id="${HEAD_REF#autopilot/}"
+          if ! [[ "$rollout_id" =~ ^[A-Za-z0-9._-]+$ ]]; then
+            echo "::error::unexpected branch name ${HEAD_REF}"
+            exit 1
+          fi
+          payload=$(jq -cn --arg id "$rollout_id" --argjson pr "$PR_NUMBER" '{step: "approve", rolloutId: $id, prNumber: $pr}')
+          echo "PR #${PR_NUMBER} closed (merged=${MERGED}); calling iamap-approver for ${rollout_id}"
+          aws lambda invoke --function-name iamap-approver \
+            --cli-binary-format raw-in-base64-out --payload "$payload" \
+            response.json > meta.json
+          cat response.json; echo
+          if [ -n "$(jq -r '.FunctionError // empty' meta.json)" ]; then
+            echo "::error::iamap-approver returned an error: $(cat response.json)"
+            exit 1
+          fi
+          echo "decision: $(jq -r '.decision' response.json)" >> "$GITHUB_STEP_SUMMARY"
